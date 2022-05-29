@@ -37,9 +37,9 @@ project "__PROJECT_NAME__"
 	filter "system:windows"
 		systemversion "latest"
 		defines "PLATFORM_WINDOWS"
+		usestdpreproc "On"
 -- Until Microsoft updates Windows 10 to not have terrible code, this must be here to prevent a warning.
 		buildoptions "/wd5105"
-		usestdpreproc "On"
 
 	filter "configurations:Debug"
 		defines "CONFIG_DEBUG"
@@ -53,7 +53,7 @@ project "__PROJECT_NAME__"
 		symbols "On"
 
 	filter "configurations:Dist"
-		kind "WindowedApp" -- TODO: is this windows only?
+		kind "WindowedApp" -- TODO: is this windows only? I don't think so...?
 		defines "CONFIG_DIST"
 		runtime "Release"
 		optimize "On"
