@@ -53,7 +53,7 @@ project "__PROJECT_NAME__"
 		symbols "On"
 
 	filter "configurations:Dist"
-		kind "WindowedApp" -- TODO: is this windows only? I don't think so...?
+		kind "WindowedApp"
 		defines "CONFIG_DIST"
 		runtime "Release"
 		optimize "On"
