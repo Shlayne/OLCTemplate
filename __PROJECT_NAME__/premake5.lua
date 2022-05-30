@@ -5,8 +5,8 @@ project "__PROJECT_NAME__"
 	cdialect "C17"
 	staticruntime "Off"
 
-	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
+	targetdir ("%{wks.location}/bin/" .. OutputDir .. "/%{prj.name}")
+	objdir ("%{wks.location}/bin-int/" .. OutputDir .. "/%{prj.name}")
 
 	files {
 		"src/**.h",
@@ -44,6 +44,7 @@ project "__PROJECT_NAME__"
 	filter "configurations:Debug"
 		defines "CONFIG_DEBUG"
 		runtime "Debug"
+		optimize "Off"
 		symbols "On"
 
 	filter "configurations:Release"
