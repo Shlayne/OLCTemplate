@@ -4,7 +4,7 @@ workspace "__WORKSPACE_NAME__"
 	architecture "x86_64"
 	startproject "__PROJECT_NAME__"
 
-	configurations { "Debug", "Release", "Dist" }
+	configurations { "Profile", "Debug", "Release", "Dist" }
 
 	solutionitems {
 		-- Visual Studio

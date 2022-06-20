@@ -3,7 +3,7 @@ project "__PROJECT_NAME__"
 	language "C++"
 	cppdialect "C++20"
 	cdialect "C17"
-	staticruntime "Off"
+	staticruntime "On"
 
 	targetdir ("%{wks.location}/bin/" .. OutputDir .. "/%{prj.name}")
 	objdir ("%{wks.location}/bin-int/" .. OutputDir .. "/%{prj.name}")
@@ -36,26 +36,31 @@ project "__PROJECT_NAME__"
 
 	filter "system:windows"
 		systemversion "latest"
-		defines "PLATFORM_WINDOWS"
 		usestdpreproc "On"
--- Until Microsoft updates Windows 10 to not have terrible code, this must be here to prevent a warning.
-		buildoptions "/wd5105"
+		buildoptions "/wd5105" -- Until Microsoft updates Windows 10 to not have terrible code (aka never), this must be here to prevent a warning.
+		defines "SYSTEM_WINDOWS"
 
-	filter "configurations:Debug"
-		defines "CONFIG_DEBUG"
+	filter "configurations:Profile"
 		runtime "Debug"
 		optimize "Off"
 		symbols "On"
+		defines "CONFIG_PROFILE"
+
+	filter "configurations:Debug"
+		runtime "Debug"
+		optimize "Debug"
+		symbols "Full"
+		defines "CONFIG_DEBUG"
 
 	filter "configurations:Release"
-		defines "CONFIG_RELEASE"
 		runtime "Release"
 		optimize "On"
 		symbols "On"
+		defines "CONFIG_RELEASE"
 
 	filter "configurations:Dist"
 		kind "WindowedApp"
-		defines "CONFIG_DIST"
 		runtime "Release"
-		optimize "On"
+		optimize "Full"
 		symbols "Off"
+		defines "CONFIG_DIST"
