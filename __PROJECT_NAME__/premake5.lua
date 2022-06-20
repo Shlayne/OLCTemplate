@@ -22,10 +22,7 @@ project "__PROJECT_NAME__"
 		-- Add any project source directories here.
 		-- "%{wks.location}/__PROJECT_NAME__/src",
 
-		-- Add any header and source dependency includes here.
-		-- "%{IncludeDir.__PROJECT_NAME__}",
-
-		-- Add any header-only dependency includes here.
+		-- Add any dependency includes here.
 		-- "%{IncludeDir.__PROJECT_NAME__}",
 	}
 	
