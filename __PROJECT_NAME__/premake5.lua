@@ -17,9 +17,8 @@ project "__PROJECT_NAME__"
 	}
 
 	includedirs {
-		"src",
-
 		-- Add any project source directories here.
+		"src",
 		-- "%{wks.location}/__PROJECT_NAME__/src",
 
 		-- Add any dependency includes here.
