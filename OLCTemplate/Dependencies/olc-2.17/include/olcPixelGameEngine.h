@@ -540,46 +540,49 @@ namespace olc
 			};
 		};
 
-		enum class Mode
-		{
-			NORMAL,
-			MASK,
-			ALPHA,
-			CUSTOM
-		};
-
-		Pixel() = default;
-		Pixel(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = _OLC nDefaultAlpha);
-		Pixel(uint32_t p);
-		_OLC Pixel& operator = (const _OLC Pixel& v) = default;
-		bool   operator ==(const _OLC Pixel& p) const;
-		bool   operator !=(const _OLC Pixel& p) const;
-		_OLC Pixel  operator * (float i) const;
-		_OLC Pixel  operator / (float i) const;
-		_OLC Pixel& operator *=(float i);
-		_OLC Pixel& operator /=(float i);
-		_OLC Pixel  operator + (_OLC Pixel p) const;
-		_OLC Pixel  operator - (_OLC Pixel p) const;
-		_OLC Pixel& operator +=(_OLC Pixel p);
-		_OLC Pixel& operator -=(_OLC Pixel p);
-		_OLC Pixel  inv() const;
+		constexpr Pixel() noexcept = default;
+		// This definition has to be here for the color constants, because they are used in the definitions.
+		constexpr Pixel(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = _OLC nDefaultAlpha) noexcept
+			: n(red | (green << 8) | (blue << 16) | (alpha << 24)) {} // Thanks jarekpelczar
+		constexpr Pixel(uint32_t p) noexcept;
+		constexpr _OLC Pixel& operator = (const _OLC Pixel& v) = default;
+		constexpr bool operator ==(const _OLC Pixel& p) const;
+		constexpr bool operator !=(const _OLC Pixel& p) const;
+		constexpr _OLC Pixel  operator * (float i) const;
+		constexpr _OLC Pixel  operator / (float i) const;
+		constexpr _OLC Pixel& operator *=(float i);
+		constexpr _OLC Pixel& operator /=(float i);
+		constexpr _OLC Pixel  operator + (_OLC Pixel p) const;
+		constexpr _OLC Pixel  operator - (_OLC Pixel p) const;
+		constexpr _OLC Pixel& operator +=(_OLC Pixel p);
+		constexpr _OLC Pixel& operator -=(_OLC Pixel p);
+		constexpr _OLC Pixel  inv() const;
 	};
 
-	_OLC Pixel PixelF(float red, float green, float blue, float alpha = 1.0f);
-	_OLC Pixel PixelLerp(_OLC Pixel p1, _OLC Pixel p2, float t);
+	constexpr _OLC Pixel PixelF(float red, float green, float blue, float alpha = 1.0f);
+	constexpr _OLC Pixel PixelLerp(_OLC Pixel p1, _OLC Pixel p2, float t);
 
 	// O------------------------------------------------------------------------------O
 	// | USEFUL CONSTANTS                                                             |
 	// O------------------------------------------------------------------------------O
-	static const _OLC Pixel
+	static constexpr _OLC Pixel
 		GREY(192, 192, 192), DARK_GREY(128, 128, 128), VERY_DARK_GREY(64, 64, 64),
 		RED(255, 0, 0), DARK_RED(128, 0, 0), VERY_DARK_RED(64, 0, 0),
+		ORANGE(255, 102, 0), DARK_ORANGE(194, 78, 0), VERY_DARK_ORANGE(133, 53, 0),
 		YELLOW(255, 255, 0), DARK_YELLOW(128, 128, 0), VERY_DARK_YELLOW(64, 64, 0),
 		GREEN(0, 255, 0), DARK_GREEN(0, 128, 0), VERY_DARK_GREEN(0, 64, 0),
 		CYAN(0, 255, 255), DARK_CYAN(0, 128, 128), VERY_DARK_CYAN(0, 64, 64),
 		BLUE(0, 0, 255), DARK_BLUE(0, 0, 128), VERY_DARK_BLUE(0, 0, 64),
 		MAGENTA(255, 0, 255), DARK_MAGENTA(128, 0, 128), VERY_DARK_MAGENTA(64, 0, 64),
 		WHITE(255, 255, 255), BLACK(0, 0, 0), BLANK(0, 0, 0, 0);
+
+	enum class PixelMode
+	{
+		NORMAL,
+		MASK,
+		ALPHA,
+		CUSTOM
+	};
 
 	// Thanks to scripticuk and others for updating the key maps
 	// NOTE: The GLUT platform will need updating, open to contributions ;)
@@ -603,11 +606,11 @@ namespace olc
 
 	namespace Mouse
 	{
-		static constexpr int32_t LEFT = 0;
-		static constexpr int32_t RIGHT = 1;
-		static constexpr int32_t MIDDLE = 2;
-		static constexpr int32_t BACK = 3;
-		static constexpr int32_t FRONT = 4;
+		static constexpr uint32_t LEFT = 0;
+		static constexpr uint32_t RIGHT = 1;
+		static constexpr uint32_t MIDDLE = 2;
+		static constexpr uint32_t BACK = 3;
+		static constexpr uint32_t FRONT = 4;
 	};
 
 	// O------------------------------------------------------------------------------O
@@ -770,9 +773,9 @@ namespace olc
 
 		typedef enum
 		{
-			NONE = 0,
-			HORIZ = 1,
-			VERT = 2
+			NONE  = 0,
+			HORIZ = 1 << 0,
+			VERT  = 1 << 1
 		} Flip;
 
 	public:
@@ -1006,11 +1009,11 @@ namespace olc
 		uint32_t CreateLayer();
 
 		// Change the pixel mode for different optimisations
-		// _OLC Pixel::Mode::NORMAL = No transparency
-		// _OLC Pixel::Mode::MASK   = Transparent if alpha is < 255
-		// _OLC Pixel::Mode::ALPHA  = Full transparency
-		void SetPixelMode(_OLC Pixel::Mode m);
-		_OLC Pixel::Mode GetPixelMode();
+		// _OLC PixelMode::NORMAL = No transparency
+		// _OLC PixelMode::MASK   = Transparent if alpha is < 255
+		// _OLC PixelMode::ALPHA  = Full transparency
+		void SetPixelMode(_OLC PixelMode m);
+		_OLC PixelMode GetPixelMode();
 		// Use a custom blend function
 		void SetPixelMode(const _STD function<_OLC Pixel(int x, int y, _OLC Pixel pSource, _OLC Pixel pDest)>& pixelMode);
 		// Change the blend factor from between 0.0f to 1.0f;
@@ -1135,7 +1138,7 @@ namespace olc
 
 	private: // Inner mysterious workings
 		_OLC Sprite* pDrawTarget = nullptr;
-		_OLC Pixel::Mode nPixelMode = _OLC Pixel::Mode::NORMAL;
+		_OLC PixelMode nPixelMode = _OLC PixelMode::NORMAL;
 		float        fBlendFactor = 1.0f;
 		_OLC vi2d    vScreenSize = { 256, 240 };
 		_OLC vf2d    vInvScreenSize = { 1.0f / 256.0f, 1.0f / 240.0f };
@@ -1244,6 +1247,119 @@ namespace olc
 
 #endif // OLC_PGE_DEF
 
+// O----------------------------------------------------------------------------------O
+// | constexpr impl, aka what must always be included before OLC_PGE_APPLICATION      |
+// O----------------------------------------------------------------------------------O
+#pragma region pge_constexpr_impl
+namespace olc
+{
+	// O------------------------------------------------------------------------------O
+	// | olc::Pixel IMPLEMENTATION                                                    |
+	// O------------------------------------------------------------------------------O
+	constexpr Pixel::Pixel(uint32_t p) noexcept
+		: n(p)
+	{
+
+	}
+
+	constexpr bool Pixel::operator==(const _OLC Pixel& p) const
+	{
+		return n == p.n;
+	}
+
+	constexpr bool Pixel::operator!=(const _OLC Pixel& p) const
+	{
+		return n != p.n;
+	}
+
+	constexpr _OLC Pixel  Pixel::operator * (float i) const
+	{
+		uint8_t r = static_cast<uint8_t>(_STD clamp(this->r * i, 0.0f, 255.0f));
+		uint8_t g = static_cast<uint8_t>(_STD clamp(this->g * i, 0.0f, 255.0f));
+		uint8_t b = static_cast<uint8_t>(_STD clamp(this->b * i, 0.0f, 255.0f));
+		return _OLC Pixel(r, g, b, a);
+	}
+
+	constexpr _OLC Pixel  Pixel::operator / (float i) const
+	{
+		uint8_t r = static_cast<uint8_t>(_STD clamp(this->r / i, 0.0f, 255.0f));
+		uint8_t g = static_cast<uint8_t>(_STD clamp(this->g / i, 0.0f, 255.0f));
+		uint8_t b = static_cast<uint8_t>(_STD clamp(this->b / i, 0.0f, 255.0f));
+		return _OLC Pixel(r, g, b, a);
+	}
+
+	constexpr _OLC Pixel& Pixel::operator *=(float i)
+	{
+		r = static_cast<uint8_t>(_STD clamp(r * i, 0.0f, 255.0f));
+		g = static_cast<uint8_t>(_STD clamp(g * i, 0.0f, 255.0f));
+		b = static_cast<uint8_t>(_STD clamp(b * i, 0.0f, 255.0f));
+		return *this;
+	}
+
+	constexpr _OLC Pixel& Pixel::operator /=(float i)
+	{
+		r = static_cast<uint8_t>(_STD clamp(r / i, 0.0f, 255.0f));
+		g = static_cast<uint8_t>(_STD clamp(g / i, 0.0f, 255.0f));
+		b = static_cast<uint8_t>(_STD clamp(b / i, 0.0f, 255.0f));
+		return *this;
+	}
+
+	constexpr _OLC Pixel  Pixel::operator + (_OLC Pixel p) const
+	{
+		uint8_t r = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(this->r) + static_cast<int32_t>(p.r), 0, 255));
+		uint8_t g = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(this->g) + static_cast<int32_t>(p.g), 0, 255));
+		uint8_t b = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(this->b) + static_cast<int32_t>(p.b), 0, 255));
+		return _OLC Pixel(r, g, b, a);
+	}
+
+	constexpr _OLC Pixel  Pixel::operator - (_OLC Pixel p) const
+	{
+		uint8_t r = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(this->r) - static_cast<int32_t>(p.r), 0, 255));
+		uint8_t g = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(this->g) - static_cast<int32_t>(p.g), 0, 255));
+		uint8_t b = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(this->b) - static_cast<int32_t>(p.b), 0, 255));
+		return _OLC Pixel(r, g, b, a);
+	}
+
+	constexpr _OLC Pixel& Pixel::operator += (_OLC Pixel p)
+	{
+		r = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(r) + static_cast<int32_t>(p.r), 0, 255));
+		g = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(g) + static_cast<int32_t>(p.g), 0, 255));
+		b = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(b) + static_cast<int32_t>(p.b), 0, 255));
+		return *this;
+	}
+
+	constexpr _OLC Pixel& Pixel::operator -= (_OLC Pixel p) // Thanks Au Lit
+	{
+		r = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(r) - static_cast<int32_t>(p.r), 0, 255));
+		g = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(g) - static_cast<int32_t>(p.g), 0, 255));
+		b = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(b) - static_cast<int32_t>(p.b), 0, 255));
+		return *this;
+	}
+
+	constexpr _OLC Pixel Pixel::inv() const
+	{
+		uint8_t r = static_cast<uint8_t>(_STD clamp(255 - static_cast<int32_t>(this->r), 0, 255));
+		uint8_t g = static_cast<uint8_t>(_STD clamp(255 - static_cast<int32_t>(this->g), 0, 255));
+		uint8_t b = static_cast<uint8_t>(_STD clamp(255 - static_cast<int32_t>(this->b), 0, 255));
+		return _OLC Pixel(r, g, b, a);
+	}
+
+	constexpr _OLC Pixel PixelF(float red, float green, float blue, float alpha)
+	{
+		return _OLC Pixel(
+			static_cast<uint8_t>(_STD clamp(red, 0.0f, 1.0f) * 255.0f),
+			static_cast<uint8_t>(_STD clamp(green, 0.0f, 1.0f) * 255.0f),
+			static_cast<uint8_t>(_STD clamp(blue, 0.0f, 1.0f) * 255.0f),
+			static_cast<uint8_t>(_STD clamp(alpha, 0.0f, 1.0f) * 255.0f)
+		);
+	}
+
+	constexpr _OLC Pixel PixelLerp(_OLC Pixel p1, _OLC Pixel p2, float t)
+	{
+		return (p2 * t) + p1 * (1.0f - t);
+	}
+}
+#pragma endregion
 
 // O------------------------------------------------------------------------------O
 // | START OF OLC_PGE_APPLICATION                                                 |
@@ -1258,118 +1374,6 @@ namespace olc
 #pragma region pge_implementation
 namespace olc
 {
-	// O------------------------------------------------------------------------------O
-	// | olc::Pixel IMPLEMENTATION                                                    |
-	// O------------------------------------------------------------------------------O
-	Pixel::Pixel(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
-		: n(red | (green << 8) | (blue << 16) | (alpha << 24)) // Thanks jarekpelczar
-	{
-
-	}
-
-	Pixel::Pixel(uint32_t p)
-		: n(p)
-	{
-
-	}
-
-	bool Pixel::operator==(const _OLC Pixel& p) const
-	{
-		return n == p.n;
-	}
-
-	bool Pixel::operator!=(const _OLC Pixel& p) const
-	{
-		return n != p.n;
-	}
-
-	_OLC Pixel  Pixel::operator * (float i) const
-	{
-		uint8_t r = static_cast<uint8_t>(_STD clamp(this->r * i, 0.0f, 255.0f));
-		uint8_t g = static_cast<uint8_t>(_STD clamp(this->g * i, 0.0f, 255.0f));
-		uint8_t b = static_cast<uint8_t>(_STD clamp(this->b * i, 0.0f, 255.0f));
-		return _OLC Pixel(r, g, b, a);
-	}
-
-	_OLC Pixel  Pixel::operator / (float i) const
-	{
-		uint8_t r = static_cast<uint8_t>(_STD clamp(this->r / i, 0.0f, 255.0f));
-		uint8_t g = static_cast<uint8_t>(_STD clamp(this->g / i, 0.0f, 255.0f));
-		uint8_t b = static_cast<uint8_t>(_STD clamp(this->b / i, 0.0f, 255.0f));
-		return _OLC Pixel(r, g, b, a);
-	}
-
-	_OLC Pixel& Pixel::operator *=(float i)
-	{
-		r = static_cast<uint8_t>(_STD clamp(r * i, 0.0f, 255.0f));
-		g = static_cast<uint8_t>(_STD clamp(g * i, 0.0f, 255.0f));
-		b = static_cast<uint8_t>(_STD clamp(b * i, 0.0f, 255.0f));
-		return *this;
-	}
-
-	_OLC Pixel& Pixel::operator /=(float i)
-	{
-		r = static_cast<uint8_t>(_STD clamp(r / i, 0.0f, 255.0f));
-		g = static_cast<uint8_t>(_STD clamp(g / i, 0.0f, 255.0f));
-		b = static_cast<uint8_t>(_STD clamp(b / i, 0.0f, 255.0f));
-		return *this;
-	}
-
-	_OLC Pixel  Pixel::operator + (_OLC Pixel p) const
-	{
-		uint8_t r = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(this->r) + static_cast<int32_t>(p.r), 0, 255));
-		uint8_t g = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(this->g) + static_cast<int32_t>(p.g), 0, 255));
-		uint8_t b = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(this->b) + static_cast<int32_t>(p.b), 0, 255));
-		return _OLC Pixel(r, g, b, a);
-	}
-
-	_OLC Pixel  Pixel::operator - (_OLC Pixel p) const
-	{
-		uint8_t r = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(this->r) - static_cast<int32_t>(p.r), 0, 255));
-		uint8_t g = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(this->g) - static_cast<int32_t>(p.g), 0, 255));
-		uint8_t b = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(this->b) - static_cast<int32_t>(p.b), 0, 255));
-		return _OLC Pixel(r, g, b, a);
-	}
-
-	_OLC Pixel& Pixel::operator += (_OLC Pixel p)
-	{
-		r = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(r) + static_cast<int32_t>(p.r), 0, 255));
-		g = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(g) + static_cast<int32_t>(p.g), 0, 255));
-		b = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(b) + static_cast<int32_t>(p.b), 0, 255));
-		return *this;
-	}
-
-	_OLC Pixel& Pixel::operator -= (_OLC Pixel p) // Thanks Au Lit
-	{
-		r = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(r) - static_cast<int32_t>(p.r), 0, 255));
-		g = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(g) - static_cast<int32_t>(p.g), 0, 255));
-		b = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(b) - static_cast<int32_t>(p.b), 0, 255));
-		return *this;
-	}
-
-	_OLC Pixel Pixel::inv() const
-	{
-		uint8_t r = static_cast<uint8_t>(_STD clamp(255 - static_cast<int32_t>(this->r), 0, 255));
-		uint8_t g = static_cast<uint8_t>(_STD clamp(255 - static_cast<int32_t>(this->g), 0, 255));
-		uint8_t b = static_cast<uint8_t>(_STD clamp(255 - static_cast<int32_t>(this->b), 0, 255));
-		return _OLC Pixel(r, g, b, a);
-	}
-
-	_OLC Pixel PixelF(float red, float green, float blue, float alpha)
-	{
-		return _OLC Pixel(
-			static_cast<uint8_t>(_STD clamp(red,   0.0f, 1.0f) * 255.0f),
-			static_cast<uint8_t>(_STD clamp(green, 0.0f, 1.0f) * 255.0f),
-			static_cast<uint8_t>(_STD clamp(blue,  0.0f, 1.0f) * 255.0f),
-			static_cast<uint8_t>(_STD clamp(alpha, 0.0f, 1.0f) * 255.0f)
-		);
-	}
-
-	_OLC Pixel PixelLerp(_OLC Pixel p1, _OLC Pixel p2, float t)
-	{
-		return (p2 * t) + p1 * (1.0f - t);
-	}
-
 	// O------------------------------------------------------------------------------O
 	// | olc::Sprite IMPLEMENTATION                                                   |
 	// O------------------------------------------------------------------------------O
@@ -2018,13 +2022,13 @@ namespace olc
 		if (!pDrawTarget)
 			return false;
 
-		if (nPixelMode == _OLC Pixel::Mode::NORMAL)
+		if (nPixelMode == _OLC PixelMode::NORMAL)
 			return pDrawTarget->SetPixel(x, y, p);
 
-		if (nPixelMode == _OLC Pixel::Mode::MASK && p.a == 255)
+		if (nPixelMode == _OLC PixelMode::MASK && p.a == 255)
 			return pDrawTarget->SetPixel(x, y, p);
 
-		if (nPixelMode == _OLC Pixel::Mode::ALPHA)
+		if (nPixelMode == _OLC PixelMode::ALPHA)
 		{
 			_OLC Pixel d = pDrawTarget->GetPixel(x, y);
 			float a = (p.a / 255.0f) * fBlendFactor;
@@ -2035,7 +2039,7 @@ namespace olc
 			return pDrawTarget->SetPixel(x, y, _OLC Pixel(static_cast<uint8_t>(r), static_cast<uint8_t>(g), static_cast<uint8_t>(b)/*, static_cast<uint8_t>(p.a * fBlendFactor)*/));
 		}
 
-		if (nPixelMode == _OLC Pixel::Mode::CUSTOM)
+		if (nPixelMode == _OLC PixelMode::CUSTOM)
 			return pDrawTarget->SetPixel(x, y, funcPixelMode(x, y, p, pDrawTarget->GetPixel(x, y)));
 
 		return false;
@@ -2295,10 +2299,10 @@ namespace olc
 	bool PixelGameEngine::ClipLineToScreen(_OLC vi2d& in_p1, _OLC vi2d& in_p2)
 	{
 		// https://en.wikipedia.org/wiki/Cohen%E2%80%93Sutherland_algorithm
-		static constexpr int SEG_I = 0b0000, SEG_L = 0b0001, SEG_R = 0b0010, SEG_B = 0b0100, SEG_T = 0b1000;
+		static constexpr uint8_t SEG_I = 0b0000, SEG_L = 0b0001, SEG_R = 0b0010, SEG_B = 0b0100, SEG_T = 0b1000;
 		auto Segment = [&vScreenSize = vScreenSize](const _OLC vi2d& v)
 		{
-			int i = SEG_I;
+			uint8_t i = SEG_I;
 			if (v.x < 0)
 				i |= SEG_L;
 			else if (v.x > vScreenSize.x)
@@ -2310,7 +2314,7 @@ namespace olc
 			return i;
 		};
 
-		int s1 = Segment(in_p1), s2 = Segment(in_p2);
+		uint8_t s1 = Segment(in_p1), s2 = Segment(in_p2);
 
 		while (true)
 		{
@@ -2320,12 +2324,12 @@ namespace olc
 				return false;
 			else
 			{
-				int s3 = s2 > s1 ? s2 : s1;
+				uint8_t s3 = s2 > s1 ? s2 : s1;
 				_OLC vi2d n;
 				if (s3 & SEG_T)
 				{
-					n.x = in_p1.x + (in_p2.x - in_p1.x) * (vScreenSize.y - in_p1.y) / (in_p2.y - in_p1.y);
-					n.y = vScreenSize.y;
+					n.x = in_p1.x + (in_p2.x - in_p1.x) * (vScreenSize.y - 1 - in_p1.y) / (in_p2.y - in_p1.y);
+					n.y = vScreenSize.y - 1;
 				}
 				else if (s3 & SEG_B)
 				{
@@ -2334,8 +2338,8 @@ namespace olc
 				}
 				else if (s3 & SEG_R)
 				{
-					n.x = vScreenSize.x;
-					n.y = in_p1.y + (in_p2.y - in_p1.y) * (vScreenSize.x - in_p1.x) / (in_p2.x - in_p1.x);
+					n.x = vScreenSize.x - 1;
+					n.y = in_p1.y + (in_p2.y - in_p1.y) * (vScreenSize.x - 1 - in_p1.x) / (in_p2.x - in_p1.x);
 				}
 				else if (s3 & SEG_L)
 				{
@@ -3241,10 +3245,10 @@ namespace olc
 	{
 		int32_t sx = 0;
 		int32_t sy = 0;
-		_OLC Pixel::Mode m = nPixelMode;
+		_OLC PixelMode m = nPixelMode;
 		// Thanks @tucna, spotted bug with col.ALPHA :P
-		if (m != _OLC Pixel::Mode::CUSTOM) // Thanks @Megarev, required for "shaders"
-			SetPixelMode(col.a != 255 ? _OLC Pixel::Mode::ALPHA : _OLC Pixel::Mode::MASK);
+		if (m != _OLC PixelMode::CUSTOM) // Thanks @Megarev, required for "shaders"
+			SetPixelMode(col.a != 255 ? _OLC PixelMode::ALPHA : _OLC PixelMode::MASK);
 		for (auto c : sText)
 		{
 			if (c == '\n')
@@ -3313,10 +3317,10 @@ namespace olc
 	{
 		int32_t sx = 0;
 		int32_t sy = 0;
-		_OLC Pixel::Mode m = nPixelMode;
+		_OLC PixelMode m = nPixelMode;
 
-		if (m != _OLC Pixel::Mode::CUSTOM)
-			SetPixelMode(col.a != 255 ? _OLC Pixel::Mode::ALPHA : _OLC Pixel::Mode::MASK);
+		if (m != _OLC PixelMode::CUSTOM)
+			SetPixelMode(col.a != 255 ? _OLC PixelMode::ALPHA : _OLC PixelMode::MASK);
 		for (auto c : sText)
 		{
 			if (c == '\n')
@@ -3353,12 +3357,12 @@ namespace olc
 		SetPixelMode(m);
 	}
 
-	void PixelGameEngine::SetPixelMode(_OLC Pixel::Mode m)
+	void PixelGameEngine::SetPixelMode(_OLC PixelMode m)
 	{
 		nPixelMode = m;
 	}
 
-	_OLC Pixel::Mode PixelGameEngine::GetPixelMode()
+	_OLC PixelMode PixelGameEngine::GetPixelMode()
 	{
 		return nPixelMode;
 	}
@@ -3366,7 +3370,7 @@ namespace olc
 	void PixelGameEngine::SetPixelMode(const _STD function<_OLC Pixel(int x, int y, _OLC Pixel, _OLC Pixel)>& pixelMode)
 	{
 		funcPixelMode = pixelMode;
-		nPixelMode = _OLC Pixel::Mode::CUSTOM;
+		nPixelMode = _OLC PixelMode::CUSTOM;
 	}
 
 	void PixelGameEngine::SetPixelBlend(float fBlend)
@@ -5849,7 +5853,6 @@ namespace olc {
 // O------------------------------------------------------------------------------O
 #pragma endregion
 
-
 #pragma region platform_emscripten
 // O------------------------------------------------------------------------------O
 // | START PLATFORM: Emscripten - Totally Game Changing...                        |
@@ -6330,7 +6333,6 @@ namespace olc
 {
 	void PixelGameEngine::olc_ConfigureSystem()
 	{
-
 #ifndef OLC_PGE_HEADLESS
 
 #ifdef OLC_IMAGE_GDI

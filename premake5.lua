@@ -4,7 +4,7 @@ workspace "OLCTemplate"
 	architecture "x86_64"
 	startproject "OLCTemplate"
 
-	configurations { "Profile", "Debug", "Release", "Dist" }
+	configurations { "Debug", "Release", "Dist" }
 
 	solutionitems {
 		-- Visual Studio
