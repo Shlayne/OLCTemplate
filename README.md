@@ -1,3 +1,3 @@
-# ProjectTemplate
+# OLCTemplate
 
-My template for creating visual studio solutions and projects.
+My template for creating simple projects using a modified version of the [OneLoneCoder Pixel Game Engine](https://github.com/OneLoneCoder/olcPixelGameEngine).

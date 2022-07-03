@@ -1,15 +1,12 @@
 #if SYSTEM_WINDOWS
 
+#include "OLCTemplate.h"
+
 int Main(int argc, char** argv)
 {
 	static_cast<void>(argc, argv);
 
-	// TODO: run your code, but please, please, please, not in this file.
-	// Just call a function here, or construct, run, and destruct you app.
-	// For example:
-	//	Application* pApplication = CreateApplication(argc, argv);
-	//	pApplication->Run();
-	//	delete pApplication;
+	olct::Run();
 
 	return 0;
 }

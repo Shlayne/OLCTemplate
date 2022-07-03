@@ -1,5 +1,5 @@
-project "__PROJECT_NAME__"
-	kind "ConsoleApp"
+project "olc"
+	kind "StaticLib"
 	language "C++"
 	cppdialect "C++20"
 	cdialect "C17"
@@ -9,25 +9,18 @@ project "__PROJECT_NAME__"
 	objdir ("%{wks.location}/bin-int/" .. OutputDir .. "/%{prj.name}")
 
 	files {
-		"src/**.h",
-		"src/**.c",
-		"src/**.hpp",
-		"src/**.cpp",
-		"src/**.inl"
+		"include/olcPixelGameEngine.h",
+		"src/olcPixelGameEngine.cpp",
 	}
 
 	includedirs {
+		"include",
+
 		-- Add any project source directories here.
-		"src",
 		-- "%{wks.location}/__PROJECT_NAME__/src",
 
 		-- Add any dependency includes here.
-		-- "%{IncludeDir.__PROJECT_NAME__}",
-	}
-	
-	-- Add any links dependency libs via their project names here.
-	links {
-		--	"__PROJECT_NAME__"
+		"%{IncludeDir.stb}",
 	}
 
 	filter "system:windows"
@@ -55,7 +48,6 @@ project "__PROJECT_NAME__"
 		defines "CONFIG_RELEASE"
 
 	filter "configurations:Dist"
-		kind "WindowedApp"
 		runtime "Release"
 		optimize "Full"
 		symbols "Off"
