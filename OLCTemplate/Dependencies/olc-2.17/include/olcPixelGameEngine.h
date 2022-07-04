@@ -345,7 +345,7 @@ int main()
 #pragma endregion
 
 #ifndef OLC_PGE_DECLARATIONS
-#define OLC_PIXEL_GAME_ENGINE_H
+#define OLC_PGE_DECLARATIONS
 
 // O-----------------------------------------------------------------------------O
 // | STANDARD INCLUDES                                                           |
@@ -4012,8 +4012,6 @@ namespace olc
 };
 #pragma endregion
 
-
-
 #ifndef OLC_PGE_HEADLESS
 
 
@@ -6571,8 +6569,6 @@ extern "C"
 #pragma endregion
 
 #endif // OLC_PGE_HEADLESS
-
-
 
 // O-----------------------------------------------------------------------------O
 // | olcPixelGameEngine Auto-Configuration                                       |
