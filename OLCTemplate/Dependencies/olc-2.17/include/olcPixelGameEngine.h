@@ -2683,9 +2683,9 @@ namespace olc
 		int32_t y2 = y + h;
 
 		x = _STD clamp(x, 0, GetDrawTargetWidth());
-		y = _STD clamp(x, 0, GetDrawTargetHeight());
+		y = _STD clamp(y, 0, GetDrawTargetHeight());
 		x2 = _STD clamp(x2, 0, GetDrawTargetWidth());
-		y2 = _STD clamp(x2, 0, GetDrawTargetHeight());
+		y2 = _STD clamp(y2, 0, GetDrawTargetHeight());
 
 		for (int32_t i = x; i < x2; i++)
 			for (int32_t j = y; j < y2; j++)
