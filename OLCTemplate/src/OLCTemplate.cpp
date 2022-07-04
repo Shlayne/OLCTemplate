@@ -1,44 +1,53 @@
 #include "OLCTemplate.h"
 
-namespace olct
+#define CHECK_ERROR(error, message, codeOffset)                      \
+	do                                                               \
+	{                                                                \
+		if ((error) != ::olc::rcode::OK)                             \
+		{                                                            \
+			std::cerr << (message) << '\n';                          \
+			switch (error)                                           \
+			{                                                        \
+				case ::olc::rcode::FAIL:    return (codeOffset) + 1; \
+				case ::olc::rcode::NO_FILE: return (codeOffset) + 2; \
+				default:                    return (codeOffset) + 0; \
+			}                                                        \
+		}                                                            \
+	}                                                                \
+	while (false)
+
+int Main(int argc, char** argv)
 {
-	void Run()
-	{
-		olc::rcode error = olc::rcode::OK;
-		OLCTemplate olcTemplate;
+	UNUSED(argc, argv);
 
-		error = olcTemplate.Construct(640, 480, 2, 2);
-		if (error != olc::rcode::OK)
-		{
-			std::cerr << "Failed to create application.\n";
-			return;
-		}
+	olc::rcode error = olc::rcode::OK;
+	OLCTemplate olcTemplate;
 
-		error = olcTemplate.Start();
-		if (error != olc::rcode::OK)
-		{
-			std::cerr << "Failed to run application.\n";
-			return;
-		}
-	}
+	error = olcTemplate.Construct(320, 200, 4, 4); // (1280, 800) / 4 -> 16:10 aspect ratio
+	CHECK_ERROR(error, "Failed to create application.", 0x1000);
 
-	OLCTemplate::OLCTemplate() : olc::PixelGameEngine()
-	{
-		sAppName = "OLC Template";
-	}
+	error = olcTemplate.Start();
+	CHECK_ERROR(error, "Failed to run application.", 0x2000);
 
-	bool OLCTemplate::OnUserCreate()
-	{
-		return true;
-	}
+	return 0;
+}
 
-	bool OLCTemplate::OnUserUpdate(float elapsedTime)
-	{
-		return true;
-	}
+OLCTemplate::OLCTemplate() : olc::PixelGameEngine()
+{
+	sAppName = "OLC Template";
+}
 
-	bool OLCTemplate::OnUserDestroy()
-	{
-		return true;
-	}
+bool OLCTemplate::OnUserCreate()
+{
+	return true;
+}
+
+bool OLCTemplate::OnUserUpdate(float elapsedTime)
+{
+	return true;
+}
+
+bool OLCTemplate::OnUserDestroy()
+{
+	return true;
 }

@@ -2,15 +2,6 @@
 
 #include "OLCTemplate.h"
 
-int Main(int argc, char** argv)
-{
-	static_cast<void>(argc, argv);
-
-	olct::Run();
-
-	return 0;
-}
-
 #if CONFIG_DIST
 
 #include <Windows.h>

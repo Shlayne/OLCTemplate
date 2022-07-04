@@ -2,19 +2,16 @@
 
 #include <olcPixelGameEngine.h>
 
-namespace olct
+int Main(int argc, char** argv);
+
+class OLCTemplate : public olc::PixelGameEngine
 {
-	void Run();
+public:
+	OLCTemplate();
+public:
+	virtual bool OnUserCreate() override;
+	virtual bool OnUserUpdate(float elapsedTime) override;
+	virtual bool OnUserDestroy() override;
+private:
 
-	class OLCTemplate : public olc::PixelGameEngine
-	{
-	public:
-		OLCTemplate();
-	public:
-		virtual bool OnUserCreate() override;
-		virtual bool OnUserUpdate(float elapsedTime) override;
-		virtual bool OnUserDestroy() override;
-	private:
-
-	};
-}
+};
