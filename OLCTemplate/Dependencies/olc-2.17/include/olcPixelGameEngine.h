@@ -640,76 +640,341 @@ namespace olc
 	// | olc::vX2d - A generic 2D vector type                                        |
 	// O-----------------------------------------------------------------------------O
 #ifndef OLC_IGNORE_VEC2D
+	
+#pragma region v2d_declarations
 	template<typename T>
 	struct v2d_generic
 	{
 		T x = 0;
 		T y = 0;
-		v2d_generic() = default;
-		v2d_generic(T n) : x(n), y(n) {}
-		v2d_generic(T x, T y) : x(x), y(y) {}
-		v2d_generic(const _OLC v2d_generic<T>& v) = default;
-		_OLC v2d_generic<T>& operator=(const _OLC v2d_generic<T>& v) = default;
-		T mag2() const { return x * x + y * y; }
-		T mag() const { return static_cast<T>(_STD sqrt(mag2())); }
-		_OLC v2d_generic<T>  norm() const { T r = 1 / mag(); return _OLC v2d_generic<T>(x * r, y * r); }
-		_OLC v2d_generic<T>  perp() const { return _OLC v2d_generic<T>(-y, x); }
-		_OLC v2d_generic<T>  floor() const { return _OLC v2d_generic<T>(_STD floor(x), _STD floor(y)); }
-		_OLC v2d_generic<T>  ceil() const { return _OLC v2d_generic<T>(_STD ceil(x), _STD ceil(y)); }
-		_OLC v2d_generic<T>  max(const _OLC v2d_generic<T>& v) const { return _OLC v2d_generic<T>(_STD max(x, v.x), _STD max(y, v.y)); }
-		_OLC v2d_generic<T>  min(const _OLC v2d_generic<T>& v) const { return _OLC v2d_generic<T>(_STD min(x, v.x), _STD min(y, v.y)); }
-		_OLC v2d_generic<T>  cart() { return { _STD cos(y) * x, _STD sin(y) * x }; }
-		_OLC v2d_generic<T>  polar() { return { mag(), _STD atan2(y, x) }; }
-		T dot(const _OLC v2d_generic<T>& rhs) const { return x * rhs.x + y * rhs.y; }
-		T cross(const _OLC v2d_generic<T>& rhs) const { return x * rhs.y - y * rhs.x; }
-		_OLC v2d_generic<T>  operator +  (const _OLC v2d_generic<T>& rhs) const { return _OLC v2d_generic<T>(x + rhs.x, y + rhs.y); }
-		_OLC v2d_generic<T>  operator -  (const _OLC v2d_generic<T>& rhs) const { return _OLC v2d_generic<T>(x - rhs.x, y - rhs.y); }
-		_OLC v2d_generic<T>  operator *  (const T& rhs)           const { return v2d_generic<T>(x * rhs, y * rhs); }
-		_OLC v2d_generic<T>  operator *  (const _OLC v2d_generic<T>& rhs) const { return _OLC v2d_generic<T>(x * rhs.x, y * rhs.y); }
-		_OLC v2d_generic<T>  operator /  (const T& rhs)           const { return v2d_generic<T>(x / rhs, y / rhs); }
-		_OLC v2d_generic<T>  operator /  (const _OLC v2d_generic<T>& rhs) const { return _OLC v2d_generic<T>(x / rhs.x, y / rhs.y); }
-		_OLC v2d_generic<T>& operator += (const _OLC v2d_generic<T>& rhs) { x += rhs.x; y += rhs.y; return *this; }
-		_OLC v2d_generic<T>& operator -= (const _OLC v2d_generic<T>& rhs) { x -= rhs.x; y -= rhs.y; return *this; }
-		_OLC v2d_generic<T>& operator *= (const T& rhs) { x *= rhs; y *= rhs; return *this; }
-		_OLC v2d_generic<T>& operator /= (const T& rhs) { x /= rhs; y /= rhs; return *this; }
-		_OLC v2d_generic<T>& operator *= (const _OLC v2d_generic<T>& rhs) { x *= rhs.x; y *= rhs.y; return *this; }
-		_OLC v2d_generic<T>& operator /= (const _OLC v2d_generic<T>& rhs) { x /= rhs.x; y /= rhs.y; return *this; }
-		_OLC v2d_generic<T>  operator +  () const { return { +x, +y }; }
-		_OLC v2d_generic<T>  operator -  () const { return { -x, -y }; }
-		bool operator == (const _OLC v2d_generic<T>& rhs) const { return (x == rhs.x && y == rhs.y); }
-		bool operator != (const _OLC v2d_generic<T>& rhs) const { return (x != rhs.x || y != rhs.y); }
-		operator bool() const { return x != 0 && y != 0; }
-		const _STD string str() const { return _STD string("(") + _STD to_string(x) + "," + _STD to_string(y) + ")"; }
-		friend _STD ostream& operator << (_STD ostream& os, const _OLC v2d_generic<T>& rhs) { return os << rhs.str(); }
-		template<typename T2> operator _OLC v2d_generic<T2>() const { return { static_cast<T2>(x), static_cast<T2>(y) }; }
+
+		constexpr v2d_generic() noexcept = default;
+
+		// All this template buisness is so the compiler will use the copy constructor if T2 is a v2d_generic.
+	private:
+		template<typename T2> struct is_v2d : _STD false_type {};
+		template<typename T2> struct is_v2d<_OLC v2d_generic<T2>> : _STD true_type {};
+		template<typename T2> static constexpr bool is_v2d_v = _OLC v2d_generic<T>::is_v2d<_STD remove_cvref_t<T2>>::value;
+	public:
+		// I can't get the definition to not be inline here, otherwise it would be.
+		template<typename T2, _STD enable_if_t<!(_OLC v2d_generic<T>::is_v2d_v<T2>), int> = 0>
+		constexpr v2d_generic(T2 n) noexcept : x(static_cast<T>(n)), y(static_cast<T>(n)) {}
+
+		template<typename T2> constexpr v2d_generic(T2 x, T2 y) noexcept;
+		template<typename T2> constexpr v2d_generic(const _OLC v2d_generic<T>& v) noexcept;
+		template<typename T2> constexpr _OLC v2d_generic<T>& operator=(const _OLC v2d_generic<T2>& v) noexcept;
+		template<typename T2> constexpr operator _OLC v2d_generic<T2>() const noexcept;
+
+		constexpr T mag2() const noexcept;
+		T mag() const noexcept;
+		_OLC v2d_generic<T> norm() const noexcept;
+		constexpr _OLC v2d_generic<T> perp() const noexcept;
+		_OLC v2d_generic<T> floor() const noexcept;
+		_OLC v2d_generic<T> ceil() const noexcept;
+		constexpr _OLC v2d_generic<T> max(const _OLC v2d_generic<T>& v) const noexcept;
+		constexpr _OLC v2d_generic<T> min(const _OLC v2d_generic<T>& v) const noexcept;
+		_OLC v2d_generic<T> cart() const noexcept;
+		_OLC v2d_generic<T> polar() const noexcept;
+		constexpr T dot(const _OLC v2d_generic<T>& rhs) const noexcept;
+		constexpr T cross(const _OLC v2d_generic<T>& rhs) const noexcept;
+		template<typename T2> constexpr _OLC v2d_generic<T>  operator+ (const _OLC v2d_generic<T2>& rhs) const noexcept;
+		template<typename T2> constexpr _OLC v2d_generic<T>& operator+=(const _OLC v2d_generic<T2>& rhs) noexcept;
+		template<typename T2> constexpr _OLC v2d_generic<T>  operator- (const _OLC v2d_generic<T2>& rhs) const noexcept;
+		template<typename T2> constexpr _OLC v2d_generic<T>& operator-=(const _OLC v2d_generic<T2>& rhs) noexcept;
+		template<typename T2> constexpr _OLC v2d_generic<T>  operator* (const _OLC v2d_generic<T2>& rhs) const noexcept;
+		template<typename T2> constexpr _OLC v2d_generic<T>& operator*=(const _OLC v2d_generic<T2>& rhs) noexcept;
+		template<typename T2> constexpr _OLC v2d_generic<T>  operator* (const T2& rhs) const noexcept;
+		template<typename T2> constexpr _OLC v2d_generic<T>& operator*=(const T2& rhs) noexcept;
+		template<typename T2> constexpr _OLC v2d_generic<T>  operator/ (const _OLC v2d_generic<T2>& rhs) const noexcept;
+		template<typename T2> constexpr _OLC v2d_generic<T>& operator/=(const _OLC v2d_generic<T2>& rhs) noexcept;
+		template<typename T2> constexpr _OLC v2d_generic<T>  operator/ (const T2& rhs) const noexcept;
+		template<typename T2> constexpr _OLC v2d_generic<T>& operator/=(const T2& rhs) noexcept;
+		constexpr _OLC v2d_generic<T> operator+() const noexcept;
+		constexpr _OLC v2d_generic<T> operator-() const noexcept;
+		constexpr bool operator==(const _OLC v2d_generic<T>& rhs) const noexcept;
+		constexpr bool operator!=(const _OLC v2d_generic<T>& rhs) const noexcept;
+		constexpr operator bool() const noexcept;
+		_NODISCARD _STD string str() const;
+
+		// To stop dandistine from crying...
+		template<typename T2> constexpr bool operator<(const _OLC v2d_generic<T2>& rhs) const noexcept;
+		template<typename T2> constexpr bool operator>(const _OLC v2d_generic<T2>& rhs) const noexcept;
 	};
+
+	template<typename T> _STD ostream& operator<<(_STD ostream& os, const _OLC v2d_generic<T>& rhs);
 
 	// Note: joshinils has some good suggestions here, but they are complicated to implement at this moment, 
 	// however they will appear in a future version of PGE
-	template<typename T, typename T2>
-	inline _OLC v2d_generic<T> operator * (T2 lhs, const _OLC v2d_generic<T>& rhs)
+	template<typename T1, typename T2> constexpr _OLC v2d_generic<T1> operator*(T2 lhs, const _OLC v2d_generic<T1>& rhs) noexcept;
+	template<typename T1, typename T2> constexpr _OLC v2d_generic<T1> operator/(T2 lhs, const _OLC v2d_generic<T1>& rhs) noexcept;
+#pragma endregion
+
+#pragma region v2d_definitions
+#pragma warning(push)
+#pragma warning(disable: 4244)
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T>::v2d_generic(T2 x, T2 y) noexcept
+		: x(static_cast<T>(x)), y(static_cast<T>(y)) {}
+
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T>::v2d_generic(const _OLC v2d_generic<T>& v) noexcept
+		: x(static_cast<T>(v.x)), y(static_cast<T>(v.y)) {}
+
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T>& _OLC v2d_generic<T>::operator=(const _OLC v2d_generic<T2>& v) noexcept
 	{
-		return _OLC v2d_generic<T>(static_cast<T>(lhs * static_cast<T2>(rhs.x)), static_cast<T>(lhs * static_cast<T2>(rhs.y)));
+		x = static_cast<T>(v.x);
+		y = static_cast<T>(v.y);
+		return *this;
 	}
 
-	template<typename T, typename T2>
-	inline _OLC v2d_generic<T> operator / (T2 lhs, const _OLC v2d_generic<T>& rhs)
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T>::operator _OLC v2d_generic<T2>() const noexcept
 	{
-		return _OLC v2d_generic<T>(static_cast<T>(lhs / static_cast<T2>(rhs.x)), static_cast<T>(lhs / static_cast<T2>(rhs.y)));
+		return { x, y };
 	}
 
-	// To stop dandistine from crying...
-	template<class T, class T2>
-	inline bool operator < (const _OLC v2d_generic<T>& lhs, const _OLC v2d_generic<T2>& rhs)
+	template<typename T>
+	constexpr T (_OLC v2d_generic<T>::mag2)() const noexcept
 	{
-		return lhs.y < rhs.y || (lhs.y == rhs.y && lhs.x < rhs.x);
+		return dot(*this);
 	}
 
-	template<class T, class T2>
-	inline bool operator > (const _OLC v2d_generic<T>& lhs, const _OLC v2d_generic<T2>& rhs)
+	template<typename T>
+	T (_OLC v2d_generic<T>::mag)() const noexcept
 	{
-		return lhs.y > rhs.y || (lhs.y == rhs.y && lhs.x > rhs.x);
+		return static_cast<T>(_STD sqrt(mag2()));
 	}
+
+	template<typename T>
+	_OLC v2d_generic<T> (_OLC v2d_generic<T>::norm)() const noexcept
+	{
+		return +*this /= mag();
+	}
+
+	template<typename T>
+	constexpr _OLC v2d_generic<T> (_OLC v2d_generic<T>::perp)() const noexcept
+	{
+		return { -y, x };
+	}
+
+	template<typename T>
+	_OLC v2d_generic<T> (_OLC v2d_generic<T>::floor)() const noexcept
+	{
+		return { _STD floor(x), _STD floor(y) };
+	}
+
+	template<typename T>
+	_OLC v2d_generic<T> (_OLC v2d_generic<T>::ceil)() const noexcept
+	{
+		return { _STD ceil(x), _STD ceil(y) };
+	}
+
+	template<typename T>
+	constexpr _OLC v2d_generic<T> (_OLC v2d_generic<T>::max)(const _OLC v2d_generic<T>& v) const noexcept
+	{
+		return _OLC v2d_generic<T>(_STD max(x, v.x), _STD max(y, v.y));
+	}
+
+	template<typename T>
+	constexpr _OLC v2d_generic<T> (_OLC v2d_generic<T>::min)(const _OLC v2d_generic<T>& v) const noexcept
+	{
+		return _OLC v2d_generic<T>(_STD min(x, v.x), _STD min(y, v.y));
+	}
+
+	template<typename T>
+	_OLC v2d_generic<T> (_OLC v2d_generic<T>::cart)() const noexcept
+	{
+		return { _STD cos(y) * x, _STD sin(y) * x };
+	}
+
+	template<typename T>
+	_OLC v2d_generic<T> (_OLC v2d_generic<T>::polar)() const noexcept
+	{
+		return { mag(), _STD atan2(y, x) };
+	}
+
+	template<typename T>
+	constexpr T (_OLC v2d_generic<T>::dot)(const _OLC v2d_generic<T>& rhs) const noexcept
+	{
+		return x * rhs.x + y * rhs.y;
+	}
+
+	template<typename T>
+	constexpr T (_OLC v2d_generic<T>::cross)(const _OLC v2d_generic<T>& rhs) const noexcept
+	{
+		return x * rhs.y - y * rhs.x;
+	}
+
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T> (_OLC v2d_generic<T>::operator+)(const _OLC v2d_generic<T2>& rhs) const noexcept
+	{
+		return +*this += rhs;
+	}
+
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T>& (_OLC v2d_generic<T>::operator+=)(const _OLC v2d_generic<T2>& rhs) noexcept
+	{
+		x += rhs.x;
+		y += rhs.y;
+		return *this;
+	}
+
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T>(_OLC v2d_generic<T>::operator-)(const _OLC v2d_generic<T2>& rhs) const noexcept
+	{
+		return +*this -= rhs;
+	}
+
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T>& (_OLC v2d_generic<T>::operator-=)(const _OLC v2d_generic<T2>& rhs) noexcept
+	{
+		x -= rhs.x;
+		y -= rhs.y;
+		return *this;
+	}
+
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T>(_OLC v2d_generic<T>::operator*)(const _OLC v2d_generic<T2>& rhs) const noexcept
+	{
+		return +*this *= rhs;
+	}
+
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T>& (_OLC v2d_generic<T>::operator*=)(const _OLC v2d_generic<T2>& rhs) noexcept
+	{
+		x *= rhs.x;
+		y *= rhs.y;
+		return *this;
+	}
+
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T> (_OLC v2d_generic<T>::operator*)(const T2& rhs) const noexcept
+	{
+		return +*this *= rhs;
+	}
+
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T>& (_OLC v2d_generic<T>::operator*=)(const T2& rhs) noexcept
+	{
+		x *= rhs;
+		y *= rhs;
+		return *this;
+	}
+
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T>(_OLC v2d_generic<T>::operator/)(const _OLC v2d_generic<T2>& rhs) const noexcept
+	{
+		return +*this /= rhs;
+	}
+
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T>& (_OLC v2d_generic<T>::operator/=)(const _OLC v2d_generic<T2>& rhs) noexcept
+	{
+		x /= rhs.x;
+		y /= rhs.y;
+		return *this;
+	}
+
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T>(_OLC v2d_generic<T>::operator/)(const T2& rhs) const noexcept
+	{
+		return +*this /= rhs;
+	}
+
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T>& (_OLC v2d_generic<T>::operator/=)(const T2& rhs) noexcept
+	{
+		x /= rhs;
+		y /= rhs;
+		return *this;
+	}
+
+	template<typename T>
+	constexpr _OLC v2d_generic<T> (_OLC v2d_generic<T>::operator+)() const noexcept
+	{
+		return { +x, +y };
+	}
+
+	template<typename T>
+	constexpr _OLC v2d_generic<T> (_OLC v2d_generic<T>::operator-)() const noexcept
+	{
+		return { -x, -y };
+	}
+
+	template<typename T>
+	constexpr bool _OLC v2d_generic<T>::operator==(const _OLC v2d_generic<T>& rhs) const noexcept
+	{
+		return x == rhs.x && y == rhs.y;
+	}
+
+	template<typename T>
+	constexpr bool _OLC v2d_generic<T>::operator!=(const _OLC v2d_generic<T>& rhs) const noexcept
+	{
+		return x != rhs.x || y != rhs.y;
+	}
+
+	template<typename T>
+	constexpr _OLC v2d_generic<T>::operator bool() const noexcept
+	{
+		return x != 0 && y != 0;
+	}
+
+	template<typename T>
+	_NODISCARD _STD string (_OLC v2d_generic<T>::str)() const
+	{
+		return '(' + _STD to_string(x) + ", " + _STD to_string(y) + ')';
+	}
+
+	template<typename T>
+	_STD ostream& operator<<(_STD ostream& os, const _OLC v2d_generic<T>& rhs)
+	{
+		return os << rhs.str();
+	}
+
+	template<typename T>
+	template<typename T2>
+	constexpr bool _OLC v2d_generic<T>::operator<(const _OLC v2d_generic<T2>& rhs) const noexcept
+	{
+		return y < rhs.y || (y == rhs.y && x < rhs.x);
+	}
+
+	template<typename T>
+	template<typename T2>
+	constexpr bool _OLC v2d_generic<T>::operator>(const _OLC v2d_generic<T2>& rhs) const noexcept
+	{
+		return y > rhs.y || (y == rhs.y && x > rhs.x);
+	}
+
+	template<typename T1, typename T2>
+	constexpr _OLC v2d_generic<T1> operator*(T2 lhs, const _OLC v2d_generic<T1>& rhs) noexcept
+	{
+		return _OLC v2d_generic<T1>(lhs * rhs.x, lhs * rhs.y);
+	}
+
+	template<typename T1, typename T2>
+	constexpr _OLC v2d_generic<T1> operator/(T2 lhs, const _OLC v2d_generic<T1>& rhs) noexcept
+	{
+		return _OLC v2d_generic<T1>(lhs / rhs.x, lhs / rhs.y);
+	}
+#pragma warning(pop)
+#pragma endregion
 
 	using vi2d = _OLC v2d_generic<int32_t>;
 	using vu2d = _OLC v2d_generic<uint32_t>;
