@@ -2,6 +2,13 @@
 
 #pragma region license_and_help
 /*
+
+
+
+	A HEAVILY modified version of the...
+
+
+
 	olcPixelGameEngine.h
 
 	+-------------------------------------------------------------+
@@ -519,9 +526,9 @@ namespace olc
 	constexpr uint8_t  nTabSizeInSpaces = 4;
 	enum class rcode
 	{
-		FAIL = 0,
-		OK = 1,
-		NO_FILE = -1
+		FAIL,
+		OK,
+		NO_FILE
 	};
 
 	// O-----------------------------------------------------------------------------O
@@ -563,20 +570,6 @@ namespace olc
 	constexpr _OLC Pixel PixelF(float red, float green, float blue, float alpha = 1.0f) noexcept;
 	constexpr _OLC Pixel PixelLerp(_OLC Pixel p1, _OLC Pixel p2, float t) noexcept;
 
-	// O-----------------------------------------------------------------------------O
-	// | USEFUL CONSTANTS                                                            |
-	// O-----------------------------------------------------------------------------O
-	static constexpr _OLC Pixel
-		GREY(192, 192, 192), DARK_GREY(128, 128, 128), VERY_DARK_GREY(64, 64, 64),
-		RED(255, 0, 0), DARK_RED(128, 0, 0), VERY_DARK_RED(64, 0, 0),
-		ORANGE(255, 102, 0), DARK_ORANGE(194, 78, 0), VERY_DARK_ORANGE(133, 53, 0),
-		YELLOW(255, 255, 0), DARK_YELLOW(128, 128, 0), VERY_DARK_YELLOW(64, 64, 0),
-		GREEN(0, 255, 0), DARK_GREEN(0, 128, 0), VERY_DARK_GREEN(0, 64, 0),
-		CYAN(0, 255, 255), DARK_CYAN(0, 128, 128), VERY_DARK_CYAN(0, 64, 64),
-		BLUE(0, 0, 255), DARK_BLUE(0, 0, 128), VERY_DARK_BLUE(0, 0, 64),
-		MAGENTA(255, 0, 255), DARK_MAGENTA(128, 0, 128), VERY_DARK_MAGENTA(64, 0, 64),
-		WHITE(255, 255, 255), BLACK(0, 0, 0), BLANK(0, 0, 0, 0);
-
 	enum class PixelMode
 	{
 		NORMAL,
@@ -585,33 +578,52 @@ namespace olc
 		CUSTOM
 	};
 
+	// O-----------------------------------------------------------------------------O
+	// | USEFUL CONSTANTS                                                            |
+	// O-----------------------------------------------------------------------------O
+	namespace Color
+	{
+		static constexpr _OLC Pixel
+			GREY(192, 192, 192), DARK_GREY(128, 128, 128), VERY_DARK_GREY(64, 64, 64),
+			RED(255, 0, 0), DARK_RED(128, 0, 0), VERY_DARK_RED(64, 0, 0),
+			ORANGE(255, 102, 0), DARK_ORANGE(194, 78, 0), VERY_DARK_ORANGE(133, 53, 0),
+			YELLOW(255, 255, 0), DARK_YELLOW(128, 128, 0), VERY_DARK_YELLOW(64, 64, 0),
+			GREEN(0, 255, 0), DARK_GREEN(0, 128, 0), VERY_DARK_GREEN(0, 64, 0),
+			CYAN(0, 255, 255), DARK_CYAN(0, 128, 128), VERY_DARK_CYAN(0, 64, 64),
+			BLUE(0, 0, 255), DARK_BLUE(0, 0, 128), VERY_DARK_BLUE(0, 0, 64),
+			MAGENTA(255, 0, 255), DARK_MAGENTA(128, 0, 128), VERY_DARK_MAGENTA(64, 0, 64),
+			WHITE(255, 255, 255), BLACK(0, 0, 0), BLANK(0, 0, 0, 0);
+	}
+
 	// Thanks to scripticuk and others for updating the key maps
 	// NOTE: The GLUT platform will need updating, open to contributions ;)
-	typedef enum
+	using Key = uint8_t;
+	enum : Key
 	{
-		NONE,
-		A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
-		K0, K1, K2, K3, K4, K5, K6, K7, K8, K9,
-		F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12,
-		UP, DOWN, LEFT, RIGHT,
-		SPACE, TAB, SHIFT, CTRL, INS, DEL, HOME, END, PGUP, PGDN,
-		BACK, ESCAPE, RETURN, ENTER, PAUSE, SCROLL,
-		NP0, NP1, NP2, NP3, NP4, NP5, NP6, NP7, NP8, NP9,
-		NP_MUL, NP_DIV, NP_ADD, NP_SUB, NP_DECIMAL, PERIOD,
-		EQUALS, COMMA, MINUS,
-		OEM_1, OEM_2, OEM_3, OEM_4, OEM_5, OEM_6, OEM_7, OEM_8,
-		CAPS_LOCK,
+		Key_NONE,
+		Key_A, Key_B, Key_C, Key_D, Key_E, Key_F, Key_G, Key_H, Key_I, Key_J, Key_K, Key_L, Key_M, Key_N, Key_O, Key_P, Key_Q, Key_R, Key_S, Key_T, Key_U, Key_V, Key_W, Key_X, Key_Y, Key_Z,
+		Key_K0, Key_K1, Key_K2, Key_K3, Key_K4, Key_K5, Key_K6, Key_K7, Key_K8, Key_K9,
+		Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, Key_F11, Key_F12,
+		Key_UP, Key_DOWN, Key_LEFT, Key_RIGHT,
+		Key_SPACE, Key_TAB, Key_SHIFT, Key_CTRL, Key_INS, Key_DEL, Key_HOME, Key_END, Key_PGUP, Key_PGDN,
+		Key_BACK, Key_ESCAPE, Key_RETURN, Key_ENTER, Key_PAUSE, Key_SCROLL,
+		Key_NP0, Key_NP1, Key_NP2, Key_NP3, Key_NP4, Key_NP5, Key_NP6, Key_NP7, Key_NP8, Key_NP9,
+		Key_NP_MUL, Key_NP_DIV, Key_NP_ADD, Key_NP_SUB, Key_NP_DECIMAL, Key_PERIOD,
+		Key_EQUALS, Key_COMMA, Key_MINUS,
+		Key_OEM_1, Key_OEM_2, Key_OEM_3, Key_OEM_4, Key_OEM_5, Key_OEM_6, Key_OEM_7, Key_OEM_8,
+		Key_CAPS_LOCK,
 
-		ENUM_END
-	} Key;
+		Key_ENUM_END
+	};
 
-	namespace Mouse
+	using MouseButton = uint32_t;
+	enum : MouseButton
 	{
-		static constexpr uint32_t LEFT = 0;
-		static constexpr uint32_t RIGHT = 1;
-		static constexpr uint32_t MIDDLE = 2;
-		static constexpr uint32_t BACK = 3;
-		static constexpr uint32_t FRONT = 4;
+		MouseButton_LEFT,
+		MouseButton_RIGHT,
+		MouseButton_MIDDLE,
+		MouseButton_BACK,
+		MouseButton_FRONT
 	};
 
 	// O-----------------------------------------------------------------------------O
@@ -772,12 +784,13 @@ namespace olc
 			CLAMP
 		};
 
-		typedef enum
+		using Flip = uint8_t;
+		enum : Flip
 		{
-			NONE  = 0,
-			HORIZ = 1 << 0,
-			VERT  = 1 << 1
-		} Flip;
+			Flip_NONE  = 0,
+			Flip_HORIZ = 1 << 0,
+			Flip_VERT  = 1 << 1
+		};
 
 	public:
 		void SetSampleMode(_OLC Sprite::Mode mode = _OLC Sprite::Mode::NORMAL);
@@ -878,7 +891,7 @@ namespace olc
 		_OLC Renderable pDrawTarget;
 		uint32_t nResID = 0;
 		_STD vector<_OLC DecalInstance> vecDecalInstance;
-		_OLC Pixel tint = _OLC WHITE;
+		_OLC Pixel tint = _OLC Color::WHITE;
 		_STD function<void()> funcHook = nullptr;
 	};
 
@@ -928,7 +941,7 @@ namespace olc
 	static _STD map<size_t, uint8_t> mapKeys;
 
 	// O-----------------------------------------------------------------------------O
-	// | _OLC PixelGameEngine - The main BASE class for your application             |
+	// | olc::PixelGameEngine - The main BASE class for your application             |
 	// O-----------------------------------------------------------------------------O
 	class PixelGameEngine
 	{
@@ -981,9 +994,6 @@ namespace olc
 		_OLC Sprite* GetDrawTarget() const;
 		// Resize the primary screen sprite
 		void SetScreenSize(int w, int h);
-		// Specify which Sprite should be the target of drawing functions, use nullptr
-		// to specify the primary screen
-		void SetDrawTarget(_OLC Sprite* target);
 		// Gets the current Frames Per Second
 		uint32_t GetFPS() const;
 		// Gets last update of elapsed time
@@ -997,6 +1007,9 @@ namespace olc
 
 	public: // CONFIGURATION ROUTINES
 		// Layer targeting functions
+
+		// Specify which Sprite should be the target of drawing functions, use nullptr to specify the primary screen
+		void SetDrawTarget(_OLC Sprite* target);
 		void SetDrawTarget(uint8_t layer);
 		void EnableLayer(uint8_t layer, bool b);
 		void SetLayerOffset(uint8_t layer, const _OLC vf2d& offset);
@@ -1016,92 +1029,92 @@ namespace olc
 		void SetPixelMode(_OLC PixelMode m);
 		_OLC PixelMode GetPixelMode();
 		// Use a custom blend function
-		void SetPixelMode(const _STD function<_OLC Pixel(int x, int y, _OLC Pixel pSource, _OLC Pixel pDest)>& pixelMode);
+		void SetPixelMode(const _STD function<_OLC Pixel(int32_t x, int32_t y, _OLC Pixel pSource, _OLC Pixel pDest)>& pixelMode);
 		// Change the blend factor from between 0.0f to 1.0f;
 		void SetPixelBlend(float fBlend);
 
 	public: // DRAWING ROUTINES
 		// Draws a single Pixel
-		virtual bool Draw(int32_t x, int32_t y, _OLC Pixel p = _OLC WHITE);
-		bool Draw(const _OLC vi2d& pos, _OLC Pixel p = _OLC WHITE);
+		virtual bool Draw(int32_t x, int32_t y, _OLC Pixel p = _OLC Color::WHITE);
+		bool Draw(const _OLC vi2d& pos, _OLC Pixel p = _OLC Color::WHITE);
 		// Draws a line from (x1,y1) to (x2,y2)
-		void DrawLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2, _OLC Pixel p = _OLC WHITE, uint32_t pattern = 0xFFFFFFFF);
-		void DrawLine(const _OLC vi2d& pos1, const _OLC vi2d& pos2, _OLC Pixel p = _OLC WHITE, uint32_t pattern = 0xFFFFFFFF);
+		void DrawLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2, _OLC Pixel p = _OLC Color::WHITE, uint32_t pattern = 0xFFFFFFFF);
+		void DrawLine(const _OLC vi2d& pos1, const _OLC vi2d& pos2, _OLC Pixel p = _OLC Color::WHITE, uint32_t pattern = 0xFFFFFFFF);
 		// Draws a circle located at (x,y) with radius
-		void DrawCircle(int32_t x, int32_t y, int32_t radius, _OLC Pixel p = _OLC WHITE, uint8_t mask = 0xFF);
-		void DrawCircle(const _OLC vi2d& pos, int32_t radius, _OLC Pixel p = _OLC WHITE, uint8_t mask = 0xFF);
+		void DrawCircle(int32_t x, int32_t y, int32_t radius, _OLC Pixel p = _OLC Color::WHITE, uint8_t mask = 0xFF);
+		void DrawCircle(const _OLC vi2d& pos, int32_t radius, _OLC Pixel p = _OLC Color::WHITE, uint8_t mask = 0xFF);
 		// Fills a circle located at (x,y) with radius
-		void FillCircle(int32_t x, int32_t y, int32_t radius, _OLC Pixel p = _OLC WHITE);
-		void FillCircle(const _OLC vi2d& pos, int32_t radius, _OLC Pixel p = _OLC WHITE);
+		void FillCircle(int32_t x, int32_t y, int32_t radius, _OLC Pixel p = _OLC Color::WHITE);
+		void FillCircle(const _OLC vi2d& pos, int32_t radius, _OLC Pixel p = _OLC Color::WHITE);
 		// Draws a rectangle at (x,y) to (x+w,y+h)
-		void DrawRect(int32_t x, int32_t y, int32_t w, int32_t h, _OLC Pixel p = _OLC WHITE);
-		void DrawRect(const _OLC vi2d& pos, const _OLC vi2d& size, _OLC Pixel p = _OLC WHITE);
+		void DrawRect(int32_t x, int32_t y, int32_t w, int32_t h, _OLC Pixel p = _OLC Color::WHITE);
+		void DrawRect(const _OLC vi2d& pos, const _OLC vi2d& size, _OLC Pixel p = _OLC Color::WHITE);
 		// Fills a rectangle at (x,y) to (x+w,y+h)
-		void FillRect(int32_t x, int32_t y, int32_t w, int32_t h, _OLC Pixel p = _OLC WHITE);
-		void FillRect(const _OLC vi2d& pos, const _OLC vi2d& size, _OLC Pixel p = _OLC WHITE);
+		void FillRect(int32_t x, int32_t y, int32_t w, int32_t h, _OLC Pixel p = _OLC Color::WHITE);
+		void FillRect(const _OLC vi2d& pos, const _OLC vi2d& size, _OLC Pixel p = _OLC Color::WHITE);
 		// Draws a triangle between points (x1,y1), (x2,y2) and (x3,y3)
-		void DrawTriangle(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, _OLC Pixel p = _OLC WHITE);
-		void DrawTriangle(const _OLC vi2d& pos1, const _OLC vi2d& pos2, const _OLC vi2d& pos3, _OLC Pixel p = _OLC WHITE);
+		void DrawTriangle(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, _OLC Pixel p = _OLC Color::WHITE);
+		void DrawTriangle(const _OLC vi2d& pos1, const _OLC vi2d& pos2, const _OLC vi2d& pos3, _OLC Pixel p = _OLC Color::WHITE);
 		// Flat fills a triangle between points (x1,y1), (x2,y2) and (x3,y3)
-		void FillTriangle(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, _OLC Pixel p = _OLC WHITE);
-		void FillTriangle(const _OLC vi2d& pos1, const _OLC vi2d& pos2, const _OLC vi2d& pos3, _OLC Pixel p = _OLC WHITE);
+		void FillTriangle(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, _OLC Pixel p = _OLC Color::WHITE);
+		void FillTriangle(const _OLC vi2d& pos1, const _OLC vi2d& pos2, const _OLC vi2d& pos3, _OLC Pixel p = _OLC Color::WHITE);
 		// Draws an entire sprite at location (x,y)
-		void DrawSprite(int32_t x, int32_t y, _OLC Sprite* sprite, uint32_t scale = 1, uint8_t flip = _OLC Sprite::Flip::NONE);
-		void DrawSprite(const _OLC vi2d& pos, _OLC Sprite* sprite, uint32_t scale = 1, uint8_t flip = _OLC Sprite::Flip::NONE);
+		void DrawSprite(int32_t x, int32_t y, _OLC Sprite* sprite, uint32_t scale = 1, Sprite::Flip flip = _OLC Sprite::Flip_NONE);
+		void DrawSprite(const _OLC vi2d& pos, _OLC Sprite* sprite, uint32_t scale = 1, Sprite::Flip flip = _OLC Sprite::Flip_NONE);
 		// Draws an area of a sprite at location (x,y), where the
 		// selected area is (ox,oy) to (ox+w,oy+h)
-		void DrawPartialSprite(int32_t x, int32_t y, Sprite* sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale = 1, uint8_t flip = _OLC Sprite::Flip::NONE);
-		void DrawPartialSprite(const _OLC vi2d& pos, Sprite* sprite, const _OLC vi2d& sourcepos, const _OLC vi2d& size, uint32_t scale = 1, uint8_t flip = _OLC Sprite::Flip::NONE);
+		void DrawPartialSprite(int32_t x, int32_t y, _OLC Sprite* sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale = 1, Sprite::Flip flip = _OLC Sprite::Flip_NONE);
+		void DrawPartialSprite(const _OLC vi2d& pos, _OLC Sprite* sprite, const _OLC vi2d& sourcepos, const _OLC vi2d& size, uint32_t scale = 1, Sprite::Flip flip = _OLC Sprite::Flip_NONE);
 		// Draws a single line of text - traditional monospaced
-		void DrawString(int32_t x, int32_t y, const _STD string& sText, _OLC Pixel col = _OLC WHITE, uint32_t scale = 1);
-		void DrawString(const _OLC vi2d& pos, const _STD string& sText, _OLC Pixel col = _OLC WHITE, uint32_t scale = 1);
+		void DrawString(int32_t x, int32_t y, const _STD string& sText, _OLC Pixel col = _OLC Color::WHITE, uint32_t scale = 1);
+		void DrawString(const _OLC vi2d& pos, const _STD string& sText, _OLC Pixel col = _OLC Color::WHITE, uint32_t scale = 1);
 		_OLC vi2d GetTextSize(const _STD string& s);
 		// Draws a single line of text - non-monospaced
-		void DrawStringProp(int32_t x, int32_t y, const _STD string& sText, _OLC Pixel col = _OLC WHITE, uint32_t scale = 1);
-		void DrawStringProp(const _OLC vi2d& pos, const _STD string& sText, _OLC Pixel col = _OLC WHITE, uint32_t scale = 1);
+		void DrawStringProp(int32_t x, int32_t y, const _STD string& sText, _OLC Pixel col = _OLC Color::WHITE, uint32_t scale = 1);
+		void DrawStringProp(const _OLC vi2d& pos, const _STD string& sText, _OLC Pixel col = _OLC Color::WHITE, uint32_t scale = 1);
 		_OLC vi2d GetTextSizeProp(const _STD string& s);
 
 		// Decal Quad functions
 		void SetDecalMode(const _OLC DecalMode& mode);
 		void SetDecalStructure(const _OLC DecalStructure& structure);
 		// Draws a whole decal, with optional scale and tinting
-		void DrawDecal(const _OLC vf2d& pos, _OLC Decal* decal, const _OLC vf2d& scale = { 1.0f }, _OLC Pixel tint = _OLC WHITE);
+		void DrawDecal(const _OLC vf2d& pos, _OLC Decal* decal, const _OLC vf2d& scale = { 1.0f }, _OLC Pixel tint = _OLC Color::WHITE);
 		// Draws a region of a decal, with optional scale and tinting
-		void DrawPartialDecal(const _OLC vf2d& pos, _OLC Decal* decal, const _OLC vf2d& source_pos, const _OLC vf2d& source_size, const _OLC vf2d& scale = { 1.0f }, _OLC Pixel tint = _OLC WHITE);
-		void DrawPartialDecal(const _OLC vf2d& pos, const _OLC vf2d& size, _OLC Decal* decal, const _OLC vf2d& source_pos, const _OLC vf2d& source_size, _OLC Pixel tint = _OLC WHITE);
+		void DrawPartialDecal(const _OLC vf2d& pos, _OLC Decal* decal, const _OLC vf2d& source_pos, const _OLC vf2d& source_size, const _OLC vf2d& scale = { 1.0f }, _OLC Pixel tint = _OLC Color::WHITE);
+		void DrawPartialDecal(const _OLC vf2d& pos, const _OLC vf2d& size, _OLC Decal* decal, const _OLC vf2d& source_pos, const _OLC vf2d& source_size, _OLC Pixel tint = _OLC Color::WHITE);
 		// Draws fully user controlled 4 vertices, pos(pixels), uv(pixels), colours
 		void DrawExplicitDecal(_OLC Decal* decal, const _OLC vf2d* pos, const _OLC vf2d* uv, const _OLC Pixel* col, uint32_t elements = 4);
 		// Draws a decal with 4 arbitrary points, warping the texture to look "correct"
-		void DrawWarpedDecal(_OLC Decal* decal, const _OLC vf2d(&pos)[4], _OLC Pixel tint = _OLC WHITE);
-		void DrawWarpedDecal(_OLC Decal* decal, const _OLC vf2d* pos, _OLC Pixel tint = _OLC WHITE);
-		void DrawWarpedDecal(_OLC Decal* decal, const _STD array<_OLC vf2d, 4>& pos, _OLC Pixel tint = _OLC WHITE);
+		void DrawWarpedDecal(_OLC Decal* decal, const _OLC vf2d(&pos)[4], _OLC Pixel tint = _OLC Color::WHITE);
+		void DrawWarpedDecal(_OLC Decal* decal, const _OLC vf2d* pos, _OLC Pixel tint = _OLC Color::WHITE);
+		void DrawWarpedDecal(_OLC Decal* decal, const _STD array<_OLC vf2d, 4>& pos, _OLC Pixel tint = _OLC Color::WHITE);
 		// As above, but you can specify a region of a decal source sprite
-		void DrawPartialWarpedDecal(_OLC Decal* decal, const _OLC vf2d(&pos)[4], const _OLC vf2d& source_pos, const _OLC vf2d& source_size, _OLC Pixel tint = _OLC WHITE);
-		void DrawPartialWarpedDecal(_OLC Decal* decal, const _OLC vf2d* pos, const _OLC vf2d& source_pos, const _OLC vf2d& source_size, _OLC Pixel tint = _OLC WHITE);
-		void DrawPartialWarpedDecal(_OLC Decal* decal, const _STD array<_OLC vf2d, 4>& pos, const _OLC vf2d& source_pos, const _OLC vf2d& source_size, _OLC Pixel tint = _OLC WHITE);
+		void DrawPartialWarpedDecal(_OLC Decal* decal, const _OLC vf2d(&pos)[4], const _OLC vf2d& source_pos, const _OLC vf2d& source_size, _OLC Pixel tint = _OLC Color::WHITE);
+		void DrawPartialWarpedDecal(_OLC Decal* decal, const _OLC vf2d* pos, const _OLC vf2d& source_pos, const _OLC vf2d& source_size, _OLC Pixel tint = _OLC Color::WHITE);
+		void DrawPartialWarpedDecal(_OLC Decal* decal, const _STD array<_OLC vf2d, 4>& pos, const _OLC vf2d& source_pos, const _OLC vf2d& source_size, _OLC Pixel tint = _OLC Color::WHITE);
 		// Draws a decal rotated to specified angle, wit point of rotation offset
-		void DrawRotatedDecal(const _OLC vf2d& pos, _OLC Decal* decal, const float fAngle, const _OLC vf2d& center = { 0.0f }, const _OLC vf2d& scale = { 1.0f }, _OLC Pixel tint = _OLC WHITE);
-		void DrawPartialRotatedDecal(const _OLC vf2d& pos, _OLC Decal* decal, const float fAngle, const _OLC vf2d& center, const _OLC vf2d& source_pos, const _OLC vf2d& source_size, const _OLC vf2d& scale = { 1.0f }, _OLC Pixel tint = _OLC WHITE);
+		void DrawRotatedDecal(const _OLC vf2d& pos, _OLC Decal* decal, const float fAngle, const _OLC vf2d& center = { 0.0f }, const _OLC vf2d& scale = { 1.0f }, _OLC Pixel tint = _OLC Color::WHITE);
+		void DrawPartialRotatedDecal(const _OLC vf2d& pos, _OLC Decal* decal, const float fAngle, const _OLC vf2d& center, const _OLC vf2d& source_pos, const _OLC vf2d& source_size, const _OLC vf2d& scale = { 1.0f }, _OLC Pixel tint = _OLC Color::WHITE);
 		// Draws a multiline string as a decal, with tiniting and scaling
-		void DrawStringDecal(const _OLC vf2d& pos, const _STD string& sText, _OLC Pixel col = _OLC WHITE, const _OLC vf2d& scale = { 1.0f });
-		void DrawStringPropDecal(const _OLC vf2d& pos, const _STD string& sText, _OLC Pixel col = _OLC WHITE, const _OLC vf2d& scale = { 1.0f });
+		void DrawStringDecal(const _OLC vf2d& pos, const _STD string& sText, _OLC Pixel col = _OLC Color::WHITE, const _OLC vf2d& scale = { 1.0f });
+		void DrawStringPropDecal(const _OLC vf2d& pos, const _STD string& sText, _OLC Pixel col = _OLC Color::WHITE, const _OLC vf2d& scale = { 1.0f });
 		// Draws a single shaded filled rectangle as a decal
-		void FillRectDecal(const _OLC vf2d& pos, const _OLC vf2d& size, _OLC Pixel col = _OLC WHITE);
+		void FillRectDecal(const _OLC vf2d& pos, const _OLC vf2d& size, _OLC Pixel col = _OLC Color::WHITE);
 		// Draws a corner shaded rectangle as a decal
 		void GradientFillRectDecal(const _OLC vf2d& pos, const _OLC vf2d& size, _OLC Pixel colTL, _OLC Pixel colBL, _OLC Pixel colBR, _OLC Pixel colTR);
 		// Draws an arbitrary convex textured polygon using GPU
-		void DrawPolygonDecal(_OLC Decal* decal, const _STD vector<_OLC vf2d>& pos, const _STD vector<_OLC vf2d>& uv, _OLC Pixel tint = _OLC WHITE);
-		void DrawPolygonDecal(_OLC Decal* decal, const _STD vector<_OLC vf2d>& pos, const _STD vector<float>& depth, const _STD vector<_OLC vf2d>& uv, _OLC Pixel tint = _OLC WHITE);
+		void DrawPolygonDecal(_OLC Decal* decal, const _STD vector<_OLC vf2d>& pos, const _STD vector<_OLC vf2d>& uv, _OLC Pixel tint = _OLC Color::WHITE);
+		void DrawPolygonDecal(_OLC Decal* decal, const _STD vector<_OLC vf2d>& pos, const _STD vector<float>& depth, const _STD vector<_OLC vf2d>& uv, _OLC Pixel tint = _OLC Color::WHITE);
 		void DrawPolygonDecal(_OLC Decal* decal, const _STD vector<_OLC vf2d>& pos, const _STD vector<_OLC vf2d>& uv, const _STD vector<_OLC Pixel>& tint);
 
 		// Draws a line in Decal Space
-		void DrawLineDecal(const _OLC vf2d& pos1, const _OLC vf2d& pos2, Pixel p = _OLC WHITE);
-		void DrawRotatedStringDecal(const _OLC vf2d& pos, const _STD string& sText, const float fAngle, const _OLC vf2d& center = { 0.0f }, _OLC Pixel col = _OLC WHITE, const _OLC vf2d& scale = { 1.0f });
-		void DrawRotatedStringPropDecal(const _OLC vf2d& pos, const _STD string& sText, const float fAngle, const _OLC vf2d& center = { 0.0f }, _OLC Pixel col = _OLC WHITE, const _OLC vf2d& scale = { 1.0f });
+		void DrawLineDecal(const _OLC vf2d& pos1, const _OLC vf2d& pos2, Pixel p = _OLC Color::WHITE);
+		void DrawRotatedStringDecal(const _OLC vf2d& pos, const _STD string& sText, const float fAngle, const _OLC vf2d& center = { 0.0f }, _OLC Pixel col = _OLC Color::WHITE, const _OLC vf2d& scale = { 1.0f });
+		void DrawRotatedStringPropDecal(const _OLC vf2d& pos, const _STD string& sText, const float fAngle, const _OLC vf2d& center = { 0.0f }, _OLC Pixel col = _OLC Color::WHITE, const _OLC vf2d& scale = { 1.0f });
 		// Clears entire draw target to Pixel
-		void Clear(_OLC Pixel p = _OLC BLACK);
+		void Clear(_OLC Pixel p = _OLC Color::BLACK);
 		// Clears the rendering back buffer
-		void ClearBuffer(_OLC Pixel p = _OLC BLACK, bool bDepth = true);
+		void ClearBuffer(_OLC Pixel p = _OLC Color::BLACK, bool bDepth = true);
 		// Returns the font image
 		_OLC Sprite* GetFontSprite();
 
@@ -1169,7 +1182,7 @@ namespace olc
 		bool         bPixelCohesion = false;
 		_OLC DecalMode nDecalMode = _OLC DecalMode::NORMAL;
 		_OLC DecalStructure nDecalStructure = _OLC DecalStructure::FAN;
-		_STD function<_OLC Pixel(int x, int y, _OLC Pixel, _OLC Pixel)> funcPixelMode;
+		_STD function<_OLC Pixel(int32_t x, int32_t y, _OLC Pixel pSource, _OLC Pixel pDest)> funcPixelMode;
 		_STD chrono::time_point<_STD chrono::system_clock> m_tp1, m_tp2;
 		_STD vector<_OLC vi2d> vFontSpacing;
 
@@ -1200,7 +1213,7 @@ namespace olc
 		void olc_ConstructFontSheet();
 		void olc_CoreUpdate();
 		void olc_PrepareEngine();
-		void olc_UpdateMouseState(int32_t button, bool state);
+		void olc_UpdateMouseState(MouseButton button, bool state);
 		void olc_UpdateKeyState(int32_t key, bool state);
 		void olc_UpdateMouseFocus(bool state);
 		void olc_UpdateKeyFocus(bool state);
@@ -1415,7 +1428,7 @@ namespace olc
 		{
 			if (x >= 0 && x < width && y >= 0 && y < height)
 				return pColData[static_cast<size_t>(y) * width + x];
-			return _OLC BLANK;
+			return _OLC Color::BLANK;
 		}
 
 		if (modeSample == _OLC Sprite::Mode::PERIODIC)
@@ -1815,9 +1828,9 @@ namespace olc
 			layer.bUpdate = true;
 		}
 		SetDrawTarget(nullptr);
-		renderer->ClearBuffer(_OLC BLACK, true);
+		renderer->ClearBuffer(_OLC Color::BLACK, true);
 		renderer->DisplayFrame();
-		renderer->ClearBuffer(_OLC BLACK, true);
+		renderer->ClearBuffer(_OLC Color::BLACK, true);
 		renderer->UpdateViewport(vViewPos, vViewSize);
 	}
 
@@ -1848,7 +1861,7 @@ namespace olc
 	}
 #endif
 
-	void PixelGameEngine::SetDrawTarget(Sprite* target)
+	void PixelGameEngine::SetDrawTarget(_OLC Sprite* target)
 	{
 		if (target)
 			pDrawTarget = target;
@@ -2639,24 +2652,24 @@ namespace olc
 		}
 	}
 
-	void PixelGameEngine::DrawSprite(const _OLC vi2d& pos, _OLC Sprite* sprite, uint32_t scale, uint8_t flip)
+	void PixelGameEngine::DrawSprite(const _OLC vi2d& pos, _OLC Sprite* sprite, uint32_t scale, Sprite::Flip flip)
 	{
 		DrawSprite(pos.x, pos.y, sprite, scale, flip);
 	}
 
-	void PixelGameEngine::DrawSprite(int32_t x, int32_t y, _OLC Sprite* sprite, uint32_t scale, uint8_t flip)
+	void PixelGameEngine::DrawSprite(int32_t x, int32_t y, _OLC Sprite* sprite, uint32_t scale, Sprite::Flip flip)
 	{
 		if (sprite == nullptr)
 			return;
 
 		int32_t fxs = 0, fxm = 1, fx = 0;
 		int32_t fys = 0, fym = 1, fy = 0;
-		if (flip & _OLC Sprite::Flip::HORIZ)
+		if (flip & _OLC Sprite::Flip_HORIZ)
 		{
 			fxs = sprite->width - 1;
 			fxm = -1;
 		}
-		if (flip & _OLC Sprite::Flip::VERT)
+		if (flip & _OLC Sprite::Flip_VERT)
 		{
 			fys = sprite->height - 1;
 			fym = -1;
@@ -2686,24 +2699,24 @@ namespace olc
 		}
 	}
 
-	void PixelGameEngine::DrawPartialSprite(const _OLC vi2d& pos, _OLC Sprite* sprite, const _OLC vi2d& sourcepos, const _OLC vi2d& size, uint32_t scale, uint8_t flip)
+	void PixelGameEngine::DrawPartialSprite(const _OLC vi2d& pos, _OLC Sprite* sprite, const _OLC vi2d& sourcepos, const _OLC vi2d& size, uint32_t scale, Sprite::Flip flip)
 	{
 		DrawPartialSprite(pos.x, pos.y, sprite, sourcepos.x, sourcepos.y, size.x, size.y, scale, flip);
 	}
 
-	void PixelGameEngine::DrawPartialSprite(int32_t x, int32_t y, _OLC Sprite* sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale, uint8_t flip)
+	void PixelGameEngine::DrawPartialSprite(int32_t x, int32_t y, _OLC Sprite* sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale, Sprite::Flip flip)
 	{
 		if (sprite == nullptr)
 			return;
 
 		int32_t fxs = 0, fxm = 1, fx = 0;
 		int32_t fys = 0, fym = 1, fy = 0;
-		if (flip & _OLC Sprite::Flip::HORIZ)
+		if (flip & _OLC Sprite::Flip_HORIZ)
 		{
 			fxs = w - 1;
 			fxm = -1;
 		}
-		if (flip & _OLC Sprite::Flip::VERT)
+		if (flip & _OLC Sprite::Flip_VERT)
 		{
 			fys = h - 1;
 			fym = -1;
@@ -3368,7 +3381,7 @@ namespace olc
 		return nPixelMode;
 	}
 
-	void PixelGameEngine::SetPixelMode(const _STD function<_OLC Pixel(int x, int y, _OLC Pixel, _OLC Pixel)>& pixelMode)
+	void PixelGameEngine::SetPixelMode(const _STD function<_OLC Pixel(int32_t x, int32_t y, _OLC Pixel pSource, _OLC Pixel pDest)>& pixelMode)
 	{
 		funcPixelMode = pixelMode;
 		nPixelMode = _OLC PixelMode::CUSTOM;
@@ -3457,7 +3470,7 @@ namespace olc
 			vMousePosCache.y = 0;
 	}
 
-	void PixelGameEngine::olc_UpdateMouseState(int32_t button, bool state)
+	void PixelGameEngine::olc_UpdateMouseState(MouseButton button, bool state)
 	{
 		pMouseNewState[button] = state;
 	}
@@ -3593,7 +3606,7 @@ namespace olc
 		nMouseWheelDelta = nMouseWheelDeltaCache;
 		nMouseWheelDeltaCache = 0;
 
-		//	renderer->ClearBuffer(_OLC BLACK, true);
+		//	renderer->ClearBuffer(_OLC Color::BLACK, true);
 
 		// Handle Frame Update
 		bool bExtensionBlockFrame = false;
@@ -3606,7 +3619,7 @@ namespace olc
 
 		// Display Frame
 		renderer->UpdateViewport(vViewPos, vViewSize);
-		renderer->ClearBuffer(_OLC BLACK, true);
+		renderer->ClearBuffer(_OLC Color::BLACK, true);
 
 		// Layer 0 must always exist
 		vLayers[0].bUpdate = true;
@@ -4505,7 +4518,7 @@ namespace olc
 
 			// Create blank texture for spriteless decals
 			rendBlankQuad.Create(1, 1);
-			rendBlankQuad.Sprite()->GetData()[0] = _OLC WHITE;
+			rendBlankQuad.Sprite()->GetData()[0] = _OLC Color::WHITE;
 			rendBlankQuad.Decal()->Update();
 			return _OLC rcode::OK;
 		}
@@ -5163,48 +5176,47 @@ namespace olc
 				vTopLeft.x, vTopLeft.y, width, height, NULL, NULL, wc.hInstance, this);
 
 			// Create Keyboard Mapping
-			mapKeys[0x00] = _OLC Key::NONE;
-			mapKeys[0x41] = _OLC Key::A; mapKeys[0x42] = _OLC Key::B; mapKeys[0x43] = _OLC Key::C; mapKeys[0x44] = _OLC Key::D; mapKeys[0x45] = _OLC Key::E;
-			mapKeys[0x46] = _OLC Key::F; mapKeys[0x47] = _OLC Key::G; mapKeys[0x48] = _OLC Key::H; mapKeys[0x49] = _OLC Key::I; mapKeys[0x4A] = _OLC Key::J;
-			mapKeys[0x4B] = _OLC Key::K; mapKeys[0x4C] = _OLC Key::L; mapKeys[0x4D] = _OLC Key::M; mapKeys[0x4E] = _OLC Key::N; mapKeys[0x4F] = _OLC Key::O;
-			mapKeys[0x50] = _OLC Key::P; mapKeys[0x51] = _OLC Key::Q; mapKeys[0x52] = _OLC Key::R; mapKeys[0x53] = _OLC Key::S; mapKeys[0x54] = _OLC Key::T;
-			mapKeys[0x55] = _OLC Key::U; mapKeys[0x56] = _OLC Key::V; mapKeys[0x57] = _OLC Key::W; mapKeys[0x58] = _OLC Key::X; mapKeys[0x59] = _OLC Key::Y;
-			mapKeys[0x5A] = _OLC Key::Z;
+			mapKeys[0x00] = _OLC Key_NONE;
+			mapKeys[0x41] = _OLC Key_A; mapKeys[0x42] = _OLC Key_B; mapKeys[0x43] = _OLC Key_C; mapKeys[0x44] = _OLC Key_D; mapKeys[0x45] = _OLC Key_E;
+			mapKeys[0x46] = _OLC Key_F; mapKeys[0x47] = _OLC Key_G; mapKeys[0x48] = _OLC Key_H; mapKeys[0x49] = _OLC Key_I; mapKeys[0x4A] = _OLC Key_J;
+			mapKeys[0x4B] = _OLC Key_K; mapKeys[0x4C] = _OLC Key_L; mapKeys[0x4D] = _OLC Key_M; mapKeys[0x4E] = _OLC Key_N; mapKeys[0x4F] = _OLC Key_O;
+			mapKeys[0x50] = _OLC Key_P; mapKeys[0x51] = _OLC Key_Q; mapKeys[0x52] = _OLC Key_R; mapKeys[0x53] = _OLC Key_S; mapKeys[0x54] = _OLC Key_T;
+			mapKeys[0x55] = _OLC Key_U; mapKeys[0x56] = _OLC Key_V; mapKeys[0x57] = _OLC Key_W; mapKeys[0x58] = _OLC Key_X; mapKeys[0x59] = _OLC Key_Y;
+			mapKeys[0x5A] = _OLC Key_Z;
 
-			mapKeys[VK_F1] = _OLC Key::F1; mapKeys[VK_F2]  = _OLC Key::F2;  mapKeys[VK_F3]  = _OLC Key::F3;  mapKeys[VK_F4]  = _OLC Key::F4;
-			mapKeys[VK_F5] = _OLC Key::F5; mapKeys[VK_F6]  = _OLC Key::F6;  mapKeys[VK_F7]  = _OLC Key::F7;  mapKeys[VK_F8]  = _OLC Key::F8;
-			mapKeys[VK_F9] = _OLC Key::F9; mapKeys[VK_F10] = _OLC Key::F10; mapKeys[VK_F11] = _OLC Key::F11; mapKeys[VK_F12] = _OLC Key::F12;
+			mapKeys[VK_F1] = _OLC Key_F1; mapKeys[VK_F2]  = _OLC Key_F2;  mapKeys[VK_F3]  = _OLC Key_F3;  mapKeys[VK_F4]  = _OLC Key_F4;
+			mapKeys[VK_F5] = _OLC Key_F5; mapKeys[VK_F6]  = _OLC Key_F6;  mapKeys[VK_F7]  = _OLC Key_F7;  mapKeys[VK_F8]  = _OLC Key_F8;
+			mapKeys[VK_F9] = _OLC Key_F9; mapKeys[VK_F10] = _OLC Key_F10; mapKeys[VK_F11] = _OLC Key_F11; mapKeys[VK_F12] = _OLC Key_F12;
 
-			mapKeys[VK_DOWN] = _OLC Key::DOWN; mapKeys[VK_LEFT] = _OLC Key::LEFT; mapKeys[VK_RIGHT] = _OLC Key::RIGHT; mapKeys[VK_UP] = _OLC Key::UP;
-			//mapKeys[VK_RETURN] = _OLC Key::ENTER;// mapKeys[VK_RETURN] = _OLC Key::RETURN;
-			
-			mapKeys[VK_BACK]   = _OLC Key::BACK;   mapKeys[VK_ESCAPE]  = _OLC Key::ESCAPE; mapKeys[VK_RETURN] = _OLC Key::ENTER; mapKeys[VK_PAUSE]  = _OLC Key::PAUSE;
-			mapKeys[VK_SCROLL] = _OLC Key::SCROLL; mapKeys[VK_TAB]     = _OLC Key::TAB; mapKeys[VK_DELETE]    = _OLC Key::DEL;   mapKeys[VK_HOME]   = _OLC Key::HOME;
-			mapKeys[VK_END]    = _OLC Key::END;    mapKeys[VK_PRIOR]   = _OLC Key::PGUP; mapKeys[VK_NEXT]     = _OLC Key::PGDN;  mapKeys[VK_INSERT] = _OLC Key::INS;
-			mapKeys[VK_SHIFT]  = _OLC Key::SHIFT;  mapKeys[VK_CONTROL] = _OLC Key::CTRL;
-			mapKeys[VK_SPACE]  = _OLC Key::SPACE;
+			mapKeys[VK_DOWN] = _OLC Key_DOWN; mapKeys[VK_LEFT] = _OLC Key_LEFT; mapKeys[VK_RIGHT] = _OLC Key_RIGHT; mapKeys[VK_UP] = _OLC Key_UP;
 
-			mapKeys[0x30] = _OLC Key::K0; mapKeys[0x31] = _OLC Key::K1; mapKeys[0x32] = _OLC Key::K2; mapKeys[0x33] = _OLC Key::K3; mapKeys[0x34] = _OLC Key::K4;
-			mapKeys[0x35] = _OLC Key::K5; mapKeys[0x36] = _OLC Key::K6; mapKeys[0x37] = _OLC Key::K7; mapKeys[0x38] = _OLC Key::K8; mapKeys[0x39] = _OLC Key::K9;
+			mapKeys[VK_BACK]   = _OLC Key_BACK;   mapKeys[VK_ESCAPE]  = _OLC Key_ESCAPE; mapKeys[VK_RETURN] = _OLC Key_ENTER; mapKeys[VK_PAUSE]  = _OLC Key_PAUSE;
+			mapKeys[VK_SCROLL] = _OLC Key_SCROLL; mapKeys[VK_TAB]     = _OLC Key_TAB;    mapKeys[VK_DELETE] = _OLC Key_DEL;   mapKeys[VK_HOME]   = _OLC Key_HOME;
+			mapKeys[VK_END]    = _OLC Key_END;    mapKeys[VK_PRIOR]   = _OLC Key_PGUP;   mapKeys[VK_NEXT]   = _OLC Key_PGDN;  mapKeys[VK_INSERT] = _OLC Key_INS;
+			mapKeys[VK_SHIFT]  = _OLC Key_SHIFT;  mapKeys[VK_CONTROL] = _OLC Key_CTRL;
+			mapKeys[VK_SPACE]  = _OLC Key_SPACE;
 
-			mapKeys[VK_NUMPAD0]  = _OLC Key::NP0;    mapKeys[VK_NUMPAD1] = _OLC Key::NP1; mapKeys[VK_NUMPAD2]   = _OLC Key::NP2; mapKeys[VK_NUMPAD3]     = _OLC Key::NP3;    mapKeys[VK_NUMPAD4] = _OLC Key::NP4;
-			mapKeys[VK_NUMPAD5]  = _OLC Key::NP5;    mapKeys[VK_NUMPAD6] = _OLC Key::NP6; mapKeys[VK_NUMPAD7]   = _OLC Key::NP7; mapKeys[VK_NUMPAD8]     = _OLC Key::NP8;    mapKeys[VK_NUMPAD9] = _OLC Key::NP9;
-			mapKeys[VK_MULTIPLY] = _OLC Key::NP_MUL; mapKeys[VK_ADD]     = _OLC Key::NP_ADD; mapKeys[VK_DIVIDE] = _OLC Key::NP_DIV; mapKeys[VK_SUBTRACT] = _OLC Key::NP_SUB; mapKeys[VK_DECIMAL] = _OLC Key::NP_DECIMAL;
+			mapKeys[0x30] = _OLC Key_K0; mapKeys[0x31] = _OLC Key_K1; mapKeys[0x32] = _OLC Key_K2; mapKeys[0x33] = _OLC Key_K3; mapKeys[0x34] = _OLC Key_K4;
+			mapKeys[0x35] = _OLC Key_K5; mapKeys[0x36] = _OLC Key_K6; mapKeys[0x37] = _OLC Key_K7; mapKeys[0x38] = _OLC Key_K8; mapKeys[0x39] = _OLC Key_K9;
+
+			mapKeys[VK_NUMPAD0]  = _OLC Key_NP0;    mapKeys[VK_NUMPAD1] = _OLC Key_NP1; mapKeys[VK_NUMPAD2]   = _OLC Key_NP2; mapKeys[VK_NUMPAD3]     = _OLC Key_NP3;    mapKeys[VK_NUMPAD4] = _OLC Key_NP4;
+			mapKeys[VK_NUMPAD5]  = _OLC Key_NP5;    mapKeys[VK_NUMPAD6] = _OLC Key_NP6; mapKeys[VK_NUMPAD7]   = _OLC Key_NP7; mapKeys[VK_NUMPAD8]     = _OLC Key_NP8;    mapKeys[VK_NUMPAD9] = _OLC Key_NP9;
+			mapKeys[VK_MULTIPLY] = _OLC Key_NP_MUL; mapKeys[VK_ADD]     = _OLC Key_NP_ADD; mapKeys[VK_DIVIDE] = _OLC Key_NP_DIV; mapKeys[VK_SUBTRACT] = _OLC Key_NP_SUB; mapKeys[VK_DECIMAL] = _OLC Key_NP_DECIMAL;
 
 			// Thanks scripticuk
-			mapKeys[VK_OEM_1]      = _OLC Key::OEM_1;		// On US and UK keyboards this is the ';:' key
-			mapKeys[VK_OEM_2]      = _OLC Key::OEM_2;		// On US and UK keyboards this is the '/?' key
-			mapKeys[VK_OEM_3]      = _OLC Key::OEM_3;		// On US keyboard this is the '~' key
-			mapKeys[VK_OEM_4]      = _OLC Key::OEM_4;		// On US and UK keyboards this is the '[{' key
-			mapKeys[VK_OEM_5]      = _OLC Key::OEM_5;		// On US keyboard this is '\|' key.
-			mapKeys[VK_OEM_6]      = _OLC Key::OEM_6;		// On US and UK keyboards this is the ']}' key
-			mapKeys[VK_OEM_7]      = _OLC Key::OEM_7;		// On US keyboard this is the single/double quote key. On UK, this is the single quote/@ symbol key
-			mapKeys[VK_OEM_8]      = _OLC Key::OEM_8;		// miscellaneous characters. Varies by keyboard
-			mapKeys[VK_OEM_PLUS]   = _OLC Key::EQUALS;		// the '+' key on any keyboard
-			mapKeys[VK_OEM_COMMA]  = _OLC Key::COMMA;		// the comma key on any keyboard
-			mapKeys[VK_OEM_MINUS]  = _OLC Key::MINUS;		// the minus key on any keyboard
-			mapKeys[VK_OEM_PERIOD] = _OLC Key::PERIOD;		// the period key on any keyboard
-			mapKeys[VK_CAPITAL]    = _OLC Key::CAPS_LOCK;
+			mapKeys[VK_OEM_1]      = _OLC Key_OEM_1;		// On US and UK keyboards this is the ';:' key
+			mapKeys[VK_OEM_2]      = _OLC Key_OEM_2;		// On US and UK keyboards this is the '/?' key
+			mapKeys[VK_OEM_3]      = _OLC Key_OEM_3;		// On US keyboard this is the '~' key
+			mapKeys[VK_OEM_4]      = _OLC Key_OEM_4;		// On US and UK keyboards this is the '[{' key
+			mapKeys[VK_OEM_5]      = _OLC Key_OEM_5;		// On US keyboard this is '\|' key.
+			mapKeys[VK_OEM_6]      = _OLC Key_OEM_6;		// On US and UK keyboards this is the ']}' key
+			mapKeys[VK_OEM_7]      = _OLC Key_OEM_7;		// On US keyboard this is the single/double quote key. On UK, this is the single quote/@ symbol key
+			mapKeys[VK_OEM_8]      = _OLC Key_OEM_8;		// miscellaneous characters. Varies by keyboard
+			mapKeys[VK_OEM_PLUS]   = _OLC Key_EQUALS;		// the '+' key on any keyboard
+			mapKeys[VK_OEM_COMMA]  = _OLC Key_COMMA;		// the comma key on any keyboard
+			mapKeys[VK_OEM_MINUS]  = _OLC Key_MINUS;		// the minus key on any keyboard
+			mapKeys[VK_OEM_PERIOD] = _OLC Key_PERIOD;		// the period key on any keyboard
+			mapKeys[VK_CAPITAL]    = _OLC Key_CAPS_LOCK;
 			return _OLC rcode::OK;
 		}
 
@@ -5257,16 +5269,16 @@ namespace olc
 				case WM_KEYUP:       ptrPGE->olc_UpdateKeyState(mapKeys[wParam], false);                     return 0;
 				case WM_SYSKEYDOWN:  ptrPGE->olc_UpdateKeyState(mapKeys[wParam], true);                      return 0;
 				case WM_SYSKEYUP:    ptrPGE->olc_UpdateKeyState(mapKeys[wParam], false);                     return 0;
-				case WM_LBUTTONDOWN: ptrPGE->olc_UpdateMouseState(0, true);                                  return 0;
-				case WM_LBUTTONUP:   ptrPGE->olc_UpdateMouseState(0, false);                                 return 0;
-				case WM_RBUTTONDOWN: ptrPGE->olc_UpdateMouseState(1, true);                                  return 0;
-				case WM_RBUTTONUP:   ptrPGE->olc_UpdateMouseState(1, false);                                 return 0;
-				case WM_MBUTTONDOWN: ptrPGE->olc_UpdateMouseState(2, true);                                  return 0;
-				case WM_MBUTTONUP:   ptrPGE->olc_UpdateMouseState(2, false);                                 return 0;
+				case WM_LBUTTONDOWN: ptrPGE->olc_UpdateMouseState(_OLC MouseButton_LEFT, true);                   return 0;
+				case WM_LBUTTONUP:   ptrPGE->olc_UpdateMouseState(_OLC MouseButton_LEFT, false);                  return 0;
+				case WM_RBUTTONDOWN: ptrPGE->olc_UpdateMouseState(_OLC MouseButton_RIGHT, true);                  return 0;
+				case WM_RBUTTONUP:   ptrPGE->olc_UpdateMouseState(_OLC MouseButton_RIGHT, false);                 return 0;
+				case WM_MBUTTONDOWN: ptrPGE->olc_UpdateMouseState(_OLC MouseButton_MIDDLE, true);                 return 0;
+				case WM_MBUTTONUP:   ptrPGE->olc_UpdateMouseState(_OLC MouseButton_MIDDLE, false);                return 0;
 				case WM_XBUTTONDOWN:
 				case WM_XBUTTONUP:
 				{
-					int32_t button = Mouse::MIDDLE;
+					MouseButton button = _OLC MouseButton_MIDDLE;
 					for (uint16_t xButton = GET_XBUTTON_WPARAM(wParam); xButton != 0; xButton >>= 1)
 						button++;
 					ptrPGE->olc_UpdateMouseState(button, uMsg == WM_XBUTTONDOWN);
@@ -5393,48 +5405,48 @@ namespace olc
 			}
 
 			// Create Keyboard Mapping
-			mapKeys[0x00] = _OLC Key::NONE;
-			mapKeys[0x61] = _OLC Key::A; mapKeys[0x62] = _OLC Key::B; mapKeys[0x63] = _OLC Key::C; mapKeys[0x64] = _OLC Key::D; mapKeys[0x65] = _OLC Key::E;
-			mapKeys[0x66] = _OLC Key::F; mapKeys[0x67] = _OLC Key::G; mapKeys[0x68] = _OLC Key::H; mapKeys[0x69] = _OLC Key::I; mapKeys[0x6A] = _OLC Key::J;
-			mapKeys[0x6B] = _OLC Key::K; mapKeys[0x6C] = _OLC Key::L; mapKeys[0x6D] = _OLC Key::M; mapKeys[0x6E] = _OLC Key::N; mapKeys[0x6F] = _OLC Key::O;
-			mapKeys[0x70] = _OLC Key::P; mapKeys[0x71] = _OLC Key::Q; mapKeys[0x72] = _OLC Key::R; mapKeys[0x73] = _OLC Key::S; mapKeys[0x74] = _OLC Key::T;
-			mapKeys[0x75] = _OLC Key::U; mapKeys[0x76] = _OLC Key::V; mapKeys[0x77] = _OLC Key::W; mapKeys[0x78] = _OLC Key::X; mapKeys[0x79] = _OLC Key::Y;
-			mapKeys[0x7A] = _OLC Key::Z;
+			mapKeys[0x00] = _OLC Key_NONE;
+			mapKeys[0x61] = _OLC Key_A; mapKeys[0x62] = _OLC Key_B; mapKeys[0x63] = _OLC Key_C; mapKeys[0x64] = _OLC Key_D; mapKeys[0x65] = _OLC Key_E;
+			mapKeys[0x66] = _OLC Key_F; mapKeys[0x67] = _OLC Key_G; mapKeys[0x68] = _OLC Key_H; mapKeys[0x69] = _OLC Key_I; mapKeys[0x6A] = _OLC Key_J;
+			mapKeys[0x6B] = _OLC Key_K; mapKeys[0x6C] = _OLC Key_L; mapKeys[0x6D] = _OLC Key_M; mapKeys[0x6E] = _OLC Key_N; mapKeys[0x6F] = _OLC Key_O;
+			mapKeys[0x70] = _OLC Key_P; mapKeys[0x71] = _OLC Key_Q; mapKeys[0x72] = _OLC Key_R; mapKeys[0x73] = _OLC Key_S; mapKeys[0x74] = _OLC Key_T;
+			mapKeys[0x75] = _OLC Key_U; mapKeys[0x76] = _OLC Key_V; mapKeys[0x77] = _OLC Key_W; mapKeys[0x78] = _OLC Key_X; mapKeys[0x79] = _OLC Key_Y;
+			mapKeys[0x7A] = _OLC Key_Z;
 
-			mapKeys[XK_F1] = _OLC Key::F1; mapKeys[XK_F2]  = _OLC Key::F2;  mapKeys[XK_F3]  = _OLC Key::F3;  mapKeys[XK_F4]  = _OLC Key::F4;
-			mapKeys[XK_F5] = _OLC Key::F5; mapKeys[XK_F6]  = _OLC Key::F6;  mapKeys[XK_F7]  = _OLC Key::F7;  mapKeys[XK_F8]  = _OLC Key::F8;
-			mapKeys[XK_F9] = _OLC Key::F9; mapKeys[XK_F10] = _OLC Key::F10; mapKeys[XK_F11] = _OLC Key::F11; mapKeys[XK_F12] = _OLC Key::F12;
+			mapKeys[XK_F1] = _OLC Key_F1; mapKeys[XK_F2]  = _OLC Key_F2;  mapKeys[XK_F3]  = _OLC Key_F3;  mapKeys[XK_F4]  = _OLC Key_F4;
+			mapKeys[XK_F5] = _OLC Key_F5; mapKeys[XK_F6]  = _OLC Key_F6;  mapKeys[XK_F7]  = _OLC Key_F7;  mapKeys[XK_F8]  = _OLC Key_F8;
+			mapKeys[XK_F9] = _OLC Key_F9; mapKeys[XK_F10] = _OLC Key_F10; mapKeys[XK_F11] = _OLC Key_F11; mapKeys[XK_F12] = _OLC Key_F12;
 
-			mapKeys[XK_Down]     = _OLC Key::DOWN;  mapKeys[XK_Left]   = _OLC Key::LEFT; mapKeys[XK_Right] = _OLC Key::RIGHT; mapKeys[XK_Up] = _OLC Key::UP;
-			mapKeys[XK_KP_Enter] = _OLC Key::ENTER; mapKeys[XK_Return] = _OLC Key::ENTER;
+			mapKeys[XK_Down]     = _OLC Key_DOWN;  mapKeys[XK_Left]   = _OLC Key_LEFT; mapKeys[XK_Right] = _OLC Key_RIGHT; mapKeys[XK_Up] = _OLC Key_UP;
+			mapKeys[XK_KP_Enter] = _OLC Key_ENTER; mapKeys[XK_Return] = _OLC Key_ENTER;
 
-			mapKeys[XK_BackSpace]   = _OLC Key::BACK;   mapKeys[XK_Escape]  = _OLC Key::ESCAPE; mapKeys[XK_Linefeed]  = _OLC Key::ENTER; mapKeys[XK_Pause]     = _OLC Key::PAUSE;
-			mapKeys[XK_Scroll_Lock] = _OLC Key::SCROLL; mapKeys[XK_Tab]     = _OLC Key::TAB;    mapKeys[XK_Delete]    = _OLC Key::DEL;   mapKeys[XK_Home]      = _OLC Key::HOME;
-			mapKeys[XK_End]         = _OLC Key::END;    mapKeys[XK_Page_Up] = _OLC Key::PGUP;   mapKeys[XK_Page_Down] = _OLC Key::PGDN;	 mapKeys[XK_Insert]    = _OLC Key::INS;
-			mapKeys[XK_Shift_L]     = _OLC Key::SHIFT;  mapKeys[XK_Shift_R] = _OLC Key::SHIFT;  mapKeys[XK_Control_L] = _OLC Key::CTRL;  mapKeys[XK_Control_R] = _OLC Key::CTRL;
-			mapKeys[XK_space]       = _OLC Key::SPACE;  mapKeys[XK_period]  = _OLC Key::PERIOD;
+			mapKeys[XK_BackSpace]   = _OLC Key_BACK;   mapKeys[XK_Escape]  = _OLC Key_ESCAPE; mapKeys[XK_Linefeed]  = _OLC Key_ENTER; mapKeys[XK_Pause]     = _OLC Key_PAUSE;
+			mapKeys[XK_Scroll_Lock] = _OLC Key_SCROLL; mapKeys[XK_Tab]     = _OLC Key_TAB;    mapKeys[XK_Delete]    = _OLC Key_DEL;   mapKeys[XK_Home]      = _OLC Key_HOME;
+			mapKeys[XK_End]         = _OLC Key_END;    mapKeys[XK_Page_Up] = _OLC Key_PGUP;   mapKeys[XK_Page_Down] = _OLC Key_PGDN;	 mapKeys[XK_Insert]    = _OLC Key_INS;
+			mapKeys[XK_Shift_L]     = _OLC Key_SHIFT;  mapKeys[XK_Shift_R] = _OLC Key_SHIFT;  mapKeys[XK_Control_L] = _OLC Key_CTRL;  mapKeys[XK_Control_R] = _OLC Key_CTRL;
+			mapKeys[XK_space]       = _OLC Key_SPACE;  mapKeys[XK_period]  = _OLC Key_PERIOD;
 
-			mapKeys[XK_0] = _OLC Key::K0; mapKeys[XK_1] = _OLC Key::K1; mapKeys[XK_2] = _OLC Key::K2; mapKeys[XK_3] = _OLC Key::K3; mapKeys[XK_4] = _OLC Key::K4;
-			mapKeys[XK_5] = _OLC Key::K5; mapKeys[XK_6] = _OLC Key::K6; mapKeys[XK_7] = _OLC Key::K7; mapKeys[XK_8] = _OLC Key::K8; mapKeys[XK_9] = _OLC Key::K9;
+			mapKeys[XK_0] = _OLC Key_K0; mapKeys[XK_1] = _OLC Key_K1; mapKeys[XK_2] = _OLC Key_K2; mapKeys[XK_3] = _OLC Key_K3; mapKeys[XK_4] = _OLC Key_K4;
+			mapKeys[XK_5] = _OLC Key_K5; mapKeys[XK_6] = _OLC Key_K6; mapKeys[XK_7] = _OLC Key_K7; mapKeys[XK_8] = _OLC Key_K8; mapKeys[XK_9] = _OLC Key_K9;
 
-			mapKeys[XK_KP_0]        = _OLC Key::NP0;    mapKeys[XK_KP_1]   = _OLC Key::NP1;    mapKeys[XK_KP_2]      = _OLC Key::NP2;    mapKeys[XK_KP_3]        = _OLC Key::NP3;    mapKeys[XK_KP_4]       = _OLC Key::NP4;
-			mapKeys[XK_KP_5]        = _OLC Key::NP5;    mapKeys[XK_KP_6]   = _OLC Key::NP6;    mapKeys[XK_KP_7]      = _OLC Key::NP7;    mapKeys[XK_KP_8]        = _OLC Key::NP8;    mapKeys[XK_KP_9]       = _OLC Key::NP9;
-			mapKeys[XK_KP_Multiply] = _OLC Key::NP_MUL; mapKeys[XK_KP_Add] = _OLC Key::NP_ADD; mapKeys[XK_KP_Divide] = _OLC Key::NP_DIV; mapKeys[XK_KP_Subtract] = _OLC Key::NP_SUB; mapKeys[XK_KP_Decimal] = _OLC Key::NP_DECIMAL;
+			mapKeys[XK_KP_0]        = _OLC Key_NP0;    mapKeys[XK_KP_1]   = _OLC Key_NP1;    mapKeys[XK_KP_2]      = _OLC Key_NP2;    mapKeys[XK_KP_3]        = _OLC Key_NP3;    mapKeys[XK_KP_4]       = _OLC Key_NP4;
+			mapKeys[XK_KP_5]        = _OLC Key_NP5;    mapKeys[XK_KP_6]   = _OLC Key_NP6;    mapKeys[XK_KP_7]      = _OLC Key_NP7;    mapKeys[XK_KP_8]        = _OLC Key_NP8;    mapKeys[XK_KP_9]       = _OLC Key_NP9;
+			mapKeys[XK_KP_Multiply] = _OLC Key_NP_MUL; mapKeys[XK_KP_Add] = _OLC Key_NP_ADD; mapKeys[XK_KP_Divide] = _OLC Key_NP_DIV; mapKeys[XK_KP_Subtract] = _OLC Key_NP_SUB; mapKeys[XK_KP_Decimal] = _OLC Key_NP_DECIMAL;
 
 			// These keys vary depending on the keyboard. I've included comments for US and UK keyboard layouts
-			mapKeys[XK_semicolon]    = _OLC Key::OEM_1; 	// On US and UK keyboards this is the ';:' key
-			mapKeys[XK_slash]        = _OLC Key::OEM_2; 	// On US and UK keyboards this is the '/?' key
-			mapKeys[XK_asciitilde]   = _OLC Key::OEM_3; 	// On US keyboard this is the '~' key
-			mapKeys[XK_bracketleft]  = _OLC Key::OEM_4; 	// On US and UK keyboards this is the '[{' key
-			mapKeys[XK_backslash]    = _OLC Key::OEM_5; 	// On US keyboard this is '\|' key.
-			mapKeys[XK_bracketright] = _OLC Key::OEM_6; 	// On US and UK keyboards this is the ']}' key
-			mapKeys[XK_apostrophe]   = _OLC Key::OEM_7; 	// On US keyboard this is the single/double quote key. On UK, this is the single quote/@ symbol key
-			mapKeys[XK_numbersign]   = _OLC Key::OEM_8; 	// miscellaneous characters. Varies by keyboard. I believe this to be the '#~' key on UK keyboards
-			mapKeys[XK_equal]        = _OLC Key::EQUALS;	// the '+' key on any keyboard
-			mapKeys[XK_comma]        = _OLC Key::COMMA; 	// the comma key on any keyboard
-			mapKeys[XK_minus]        = _OLC Key::MINUS; 	// the minus key on any keyboard
+			mapKeys[XK_semicolon]    = _OLC Key_OEM_1; 	// On US and UK keyboards this is the ';:' key
+			mapKeys[XK_slash]        = _OLC Key_OEM_2; 	// On US and UK keyboards this is the '/?' key
+			mapKeys[XK_asciitilde]   = _OLC Key_OEM_3; 	// On US keyboard this is the '~' key
+			mapKeys[XK_bracketleft]  = _OLC Key_OEM_4; 	// On US and UK keyboards this is the '[{' key
+			mapKeys[XK_backslash]    = _OLC Key_OEM_5; 	// On US keyboard this is '\|' key.
+			mapKeys[XK_bracketright] = _OLC Key_OEM_6; 	// On US and UK keyboards this is the ']}' key
+			mapKeys[XK_apostrophe]   = _OLC Key_OEM_7; 	// On US keyboard this is the single/double quote key. On UK, this is the single quote/@ symbol key
+			mapKeys[XK_numbersign]   = _OLC Key_OEM_8; 	// miscellaneous characters. Varies by keyboard. I believe this to be the '#~' key on UK keyboards
+			mapKeys[XK_equal]        = _OLC Key_EQUALS;	// the '+' key on any keyboard
+			mapKeys[XK_comma]        = _OLC Key_COMMA; 	// the comma key on any keyboard
+			mapKeys[XK_minus]        = _OLC Key_MINUS; 	// the minus key on any keyboard
 
-			mapKeys[XK_Caps_Lock]    = _OLC Key::CAPS_LOCK;
+			mapKeys[XK_Caps_Lock]    = _OLC Key_CAPS_LOCK;
 
 			return _OLC rcode::OK;
 		}
@@ -5491,9 +5503,9 @@ namespace olc
 				{
 					switch (xev.xbutton.button)
 					{
-						case 1:	ptrPGE->olc_UpdateMouseState(0, true); break;
-						case 2:	ptrPGE->olc_UpdateMouseState(2, true); break;
-						case 3:	ptrPGE->olc_UpdateMouseState(1, true); break;
+						case 1:	ptrPGE->olc_UpdateMouseState(_OLC MouseButton_LEFT, true); break;
+						case 2:	ptrPGE->olc_UpdateMouseState(_OLC MouseButton_MIDDLE, true); break;
+						case 3:	ptrPGE->olc_UpdateMouseState(_OLC MouseButton_RIGHT, true); break;
 						case 4:	ptrPGE->olc_UpdateMouseWheel(120); break;
 						case 5:	ptrPGE->olc_UpdateMouseWheel(-120); break;
 						default: break;
@@ -5503,9 +5515,9 @@ namespace olc
 				{
 					switch (xev.xbutton.button)
 					{
-						case 1:	ptrPGE->olc_UpdateMouseState(0, false); break;
-						case 2:	ptrPGE->olc_UpdateMouseState(2, false); break;
-						case 3:	ptrPGE->olc_UpdateMouseState(1, false); break;
+						case 1:	ptrPGE->olc_UpdateMouseState(_OLC MouseButton_LEFT, false); break;
+						case 2:	ptrPGE->olc_UpdateMouseState(_OLC MouseButton_MIDDLE, false); break;
+						case 3:	ptrPGE->olc_UpdateMouseState(_OLC MouseButton_RIGHT, false); break;
 						default: break;
 					}
 				}
@@ -5678,28 +5690,28 @@ namespace olc {
 			}
 
 			// Create Keyboard Mapping
-			mapKeys[0x00] = _OLC Key::NONE;
-			mapKeys['A']  = _OLC Key::A; mapKeys['B'] = _OLC Key::B; mapKeys['C'] = _OLC Key::C; mapKeys['D'] = _OLC Key::D; mapKeys['E'] = _OLC Key::E;
-			mapKeys['F']  = _OLC Key::F; mapKeys['G'] = _OLC Key::G; mapKeys['H'] = _OLC Key::H; mapKeys['I'] = _OLC Key::I; mapKeys['J'] = _OLC Key::J;
-			mapKeys['K']  = _OLC Key::K; mapKeys['L'] = _OLC Key::L; mapKeys['M'] = _OLC Key::M; mapKeys['N'] = _OLC Key::N; mapKeys['O'] = _OLC Key::O;
-			mapKeys['P']  = _OLC Key::P; mapKeys['Q'] = _OLC Key::Q; mapKeys['R'] = _OLC Key::R; mapKeys['S'] = _OLC Key::S; mapKeys['T'] = _OLC Key::T;
-			mapKeys['U']  = _OLC Key::U; mapKeys['V'] = _OLC Key::V; mapKeys['W'] = _OLC Key::W; mapKeys['X'] = _OLC Key::X; mapKeys['Y'] = _OLC Key::Y;
-			mapKeys['Z']  = _OLC Key::Z;
+			mapKeys[0x00] = _OLC Key_NONE;
+			mapKeys['A']  = _OLC Key_A; mapKeys['B'] = _OLC Key_B; mapKeys['C'] = _OLC Key_C; mapKeys['D'] = _OLC Key_D; mapKeys['E'] = _OLC Key_E;
+			mapKeys['F']  = _OLC Key_F; mapKeys['G'] = _OLC Key_G; mapKeys['H'] = _OLC Key_H; mapKeys['I'] = _OLC Key_I; mapKeys['J'] = _OLC Key_J;
+			mapKeys['K']  = _OLC Key_K; mapKeys['L'] = _OLC Key_L; mapKeys['M'] = _OLC Key_M; mapKeys['N'] = _OLC Key_N; mapKeys['O'] = _OLC Key_O;
+			mapKeys['P']  = _OLC Key_P; mapKeys['Q'] = _OLC Key_Q; mapKeys['R'] = _OLC Key_R; mapKeys['S'] = _OLC Key_S; mapKeys['T'] = _OLC Key_T;
+			mapKeys['U']  = _OLC Key_U; mapKeys['V'] = _OLC Key_V; mapKeys['W'] = _OLC Key_W; mapKeys['X'] = _OLC Key_X; mapKeys['Y'] = _OLC Key_Y;
+			mapKeys['Z']  = _OLC Key_Z;
 
-			mapKeys[GLUT_KEY_F1] = _OLC Key::F1; mapKeys[GLUT_KEY_F2]  = _OLC Key::F2;  mapKeys[GLUT_KEY_F3]  = _OLC Key::F3;  mapKeys[GLUT_KEY_F4]  = _OLC Key::F4;
-			mapKeys[GLUT_KEY_F5] = _OLC Key::F5; mapKeys[GLUT_KEY_F6]  = _OLC Key::F6;  mapKeys[GLUT_KEY_F7]  = _OLC Key::F7;  mapKeys[GLUT_KEY_F8]  = _OLC Key::F8;
-			mapKeys[GLUT_KEY_F9] = _OLC Key::F9; mapKeys[GLUT_KEY_F10] = _OLC Key::F10; mapKeys[GLUT_KEY_F11] = _OLC Key::F11; mapKeys[GLUT_KEY_F12] = _OLC Key::F12;
+			mapKeys[GLUT_KEY_F1] = _OLC Key_F1; mapKeys[GLUT_KEY_F2]  = _OLC Key_F2;  mapKeys[GLUT_KEY_F3]  = _OLC Key_F3;  mapKeys[GLUT_KEY_F4]  = _OLC Key_F4;
+			mapKeys[GLUT_KEY_F5] = _OLC Key_F5; mapKeys[GLUT_KEY_F6]  = _OLC Key_F6;  mapKeys[GLUT_KEY_F7]  = _OLC Key_F7;  mapKeys[GLUT_KEY_F8]  = _OLC Key_F8;
+			mapKeys[GLUT_KEY_F9] = _OLC Key_F9; mapKeys[GLUT_KEY_F10] = _OLC Key_F10; mapKeys[GLUT_KEY_F11] = _OLC Key_F11; mapKeys[GLUT_KEY_F12] = _OLC Key_F12;
 
-			mapKeys[GLUT_KEY_DOWN] = _OLC Key::DOWN; mapKeys[GLUT_KEY_LEFT] = _OLC Key::LEFT; mapKeys[GLUT_KEY_RIGHT] = _OLC Key::RIGHT; mapKeys[GLUT_KEY_UP] = _OLC Key::UP;
-			mapKeys[13]            = _OLC Key::ENTER;
+			mapKeys[GLUT_KEY_DOWN] = _OLC Key_DOWN; mapKeys[GLUT_KEY_LEFT] = _OLC Key_LEFT; mapKeys[GLUT_KEY_RIGHT] = _OLC Key_RIGHT; mapKeys[GLUT_KEY_UP] = _OLC Key_UP;
+			mapKeys[13]            = _OLC Key_ENTER;
 
-			mapKeys[127]          = _OLC Key::BACK;  mapKeys[27]               = _OLC Key::ESCAPE;
-			mapKeys[9]            = _OLC Key::TAB;   mapKeys[GLUT_KEY_HOME]    = _OLC Key::HOME;
-			mapKeys[GLUT_KEY_END] = _OLC Key::END;   mapKeys[GLUT_KEY_PAGE_UP] = _OLC Key::PGUP; mapKeys[GLUT_KEY_PAGE_DOWN] = _OLC Key::PGDN;    mapKeys[GLUT_KEY_INSERT] = _OLC Key::INS;
-			mapKeys[32]           = _OLC Key::SPACE; mapKeys[46]               = _OLC Key::PERIOD;
+			mapKeys[127]          = _OLC Key_BACK;  mapKeys[27]               = _OLC Key_ESCAPE;
+			mapKeys[9]            = _OLC Key_TAB;   mapKeys[GLUT_KEY_HOME]    = _OLC Key_HOME;
+			mapKeys[GLUT_KEY_END] = _OLC Key_END;   mapKeys[GLUT_KEY_PAGE_UP] = _OLC Key_PGUP; mapKeys[GLUT_KEY_PAGE_DOWN] = _OLC Key_PGDN;    mapKeys[GLUT_KEY_INSERT] = _OLC Key_INS;
+			mapKeys[32]           = _OLC Key_SPACE; mapKeys[46]               = _OLC Key_PERIOD;
 
-			mapKeys[48] = _OLC Key::K0; mapKeys[49] = _OLC Key::K1; mapKeys[50] = _OLC Key::K2; mapKeys[51] = _OLC Key::K3; mapKeys[52] = _OLC Key::K4;
-			mapKeys[53] = _OLC Key::K5; mapKeys[54] = _OLC Key::K6; mapKeys[55] = _OLC Key::K7; mapKeys[56] = _OLC Key::K8; mapKeys[57] = _OLC Key::K9;
+			mapKeys[48] = _OLC Key_K0; mapKeys[49] = _OLC Key_K1; mapKeys[50] = _OLC Key_K2; mapKeys[51] = _OLC Key_K3; mapKeys[52] = _OLC Key_K4;
+			mapKeys[53] = _OLC Key_K5; mapKeys[54] = _OLC Key_K6; mapKeys[55] = _OLC Key_K7; mapKeys[56] = _OLC Key_K8; mapKeys[57] = _OLC Key_K9;
 
 			// NOTE: MISSING KEYS :O
 
@@ -5712,12 +5724,12 @@ namespace olc {
 							key -= 32;
 						break;
 					case GLUT_ACTIVE_SHIFT:
-						ptrPGE->olc_UpdateKeyState(Key::SHIFT, true);
+						ptrPGE->olc_UpdateKeyState(Key_SHIFT, true);
 						break;
 					case GLUT_ACTIVE_CTRL:
 						if ('a' <= key && key <= 'z')
 							key -= 32;
-						ptrPGE->olc_UpdateKeyState(Key::CTRL, true);
+						ptrPGE->olc_UpdateKeyState(Key_CTRL, true);
 						break;
 					case GLUT_ACTIVE_ALT:
 						if ('a' <= key && key <= 'z')
@@ -5737,11 +5749,11 @@ namespace olc {
 						if ('a' <= key && key <= 'z') key -= 32;
 						break;
 					case GLUT_ACTIVE_SHIFT:
-						ptrPGE->olc_UpdateKeyState(Key::SHIFT, false);
+						ptrPGE->olc_UpdateKeyState(Key_SHIFT, false);
 						break;
 					case GLUT_ACTIVE_CTRL:
 						if ('a' <= key && key <= 'z') key -= 32;
-						ptrPGE->olc_UpdateKeyState(Key::CTRL, false);
+						ptrPGE->olc_UpdateKeyState(Key_CTRL, false);
 						break;
 					case GLUT_ACTIVE_ALT:
 						if ('a' <= key && key <= 'z') key -= 32;
@@ -5771,16 +5783,16 @@ namespace olc {
 				switch (button)
 				{
 					case GLUT_LEFT_BUTTON:
-						if (state == GLUT_UP) ptrPGE->olc_UpdateMouseState(0, false);
-						else if (state == GLUT_DOWN) ptrPGE->olc_UpdateMouseState(0, true);
+						if (state == GLUT_UP) ptrPGE->olc_UpdateMouseState(_OLC MouseButton_LEFT, false);
+						else if (state == GLUT_DOWN) ptrPGE->olc_UpdateMouseState(_OLC MouseButton_LEFT, true);
 						break;
 					case GLUT_MIDDLE_BUTTON:
-						if (state == GLUT_UP) ptrPGE->olc_UpdateMouseState(2, false);
-						else if (state == GLUT_DOWN) ptrPGE->olc_UpdateMouseState(2, true);
+						if (state == GLUT_UP) ptrPGE->olc_UpdateMouseState(_OLC MouseButton_MIDDLE, false);
+						else if (state == GLUT_DOWN) ptrPGE->olc_UpdateMouseState(_OLC MouseButton_MIDDLE, true);
 						break;
 					case GLUT_RIGHT_BUTTON:
-						if (state == GLUT_UP) ptrPGE->olc_UpdateMouseState(1, false);
-						else if (state == GLUT_DOWN) ptrPGE->olc_UpdateMouseState(1, true);
+						if (state == GLUT_UP) ptrPGE->olc_UpdateMouseState(_OLC MouseButton_RIGHT, false);
+						else if (state == GLUT_DOWN) ptrPGE->olc_UpdateMouseState(_OLC MouseButton_RIGHT, true);
 						break;
 				}
 			});
@@ -5932,45 +5944,45 @@ namespace olc
 		{
 			emscripten_set_canvas_element_size("#canvas", vWindowSize.x, vWindowSize.y);
 
-			mapKeys[DOM_PK_UNKNOWN] = _OLC Key::NONE;
-			mapKeys[DOM_PK_A]  = _OLC Key::A;  mapKeys[DOM_PK_B] = _OLC Key::B; mapKeys[DOM_PK_C]  = _OLC Key::C; mapKeys[DOM_PK_D] = _OLC Key::D;
-			mapKeys[DOM_PK_E]  = _OLC Key::E;  mapKeys[DOM_PK_F] = _OLC Key::F; mapKeys[DOM_PK_G]  = _OLC Key::G; mapKeys[DOM_PK_H] = _OLC Key::H;
-			mapKeys[DOM_PK_I]  = _OLC Key::I;  mapKeys[DOM_PK_J] = _OLC Key::J; mapKeys[DOM_PK_K]  = _OLC Key::K; mapKeys[DOM_PK_L] = _OLC Key::L;
-			mapKeys[DOM_PK_M]  = _OLC Key::M;  mapKeys[DOM_PK_N] = _OLC Key::N; mapKeys[DOM_PK_O]  = _OLC Key::O; mapKeys[DOM_PK_P] = _OLC Key::P;
-			mapKeys[DOM_PK_Q]  = _OLC Key::Q;  mapKeys[DOM_PK_R] = _OLC Key::R; mapKeys[DOM_PK_S]  = _OLC Key::S; mapKeys[DOM_PK_T] = _OLC Key::T;
-			mapKeys[DOM_PK_U]  = _OLC Key::U;  mapKeys[DOM_PK_V] = _OLC Key::V; mapKeys[DOM_PK_W]  = _OLC Key::W; mapKeys[DOM_PK_X] = _OLC Key::X;
-			mapKeys[DOM_PK_Y]  = _OLC Key::Y;  mapKeys[DOM_PK_Z] = _OLC Key::Z;
-			mapKeys[DOM_PK_0]  = _OLC Key::K0; mapKeys[DOM_PK_1] = _OLC Key::K1; mapKeys[DOM_PK_2] = _OLC Key::K2;
-			mapKeys[DOM_PK_3]  = _OLC Key::K3; mapKeys[DOM_PK_4] = _OLC Key::K4; mapKeys[DOM_PK_5] = _OLC Key::K5;
-			mapKeys[DOM_PK_6]  = _OLC Key::K6; mapKeys[DOM_PK_7] = _OLC Key::K7; mapKeys[DOM_PK_8] = _OLC Key::K8;
-			mapKeys[DOM_PK_9]  = _OLC Key::K9;
-			mapKeys[DOM_PK_F1] = _OLC Key::F1; mapKeys[DOM_PK_F2] = Key::F2; mapKeys[DOM_PK_F3] = Key::F3; mapKeys[DOM_PK_F4] = Key::F4;
-			mapKeys[DOM_PK_F5] = _OLC Key::F5; mapKeys[DOM_PK_F6] = Key::F6; mapKeys[DOM_PK_F7] = Key::F7; mapKeys[DOM_PK_F8] = Key::F8;
-			mapKeys[DOM_PK_F9] = _OLC Key::F9; mapKeys[DOM_PK_F10] = Key::F10; mapKeys[DOM_PK_F11] = Key::F11; mapKeys[DOM_PK_F12] = Key::F12;
-			mapKeys[DOM_PK_ARROW_UP]        = _OLC Key::UP;    mapKeys[DOM_PK_ARROW_DOWN]    = _OLC Key::DOWN;
-			mapKeys[DOM_PK_ARROW_LEFT]      = _OLC Key::LEFT;  mapKeys[DOM_PK_ARROW_RIGHT]   = _OLC Key::RIGHT;
-			mapKeys[DOM_PK_SPACE]           = _OLC Key::SPACE; mapKeys[DOM_PK_TAB]           = _OLC Key::TAB;
-			mapKeys[DOM_PK_SHIFT_LEFT]      = _OLC Key::SHIFT; mapKeys[DOM_PK_SHIFT_RIGHT]   = _OLC Key::SHIFT;
-			mapKeys[DOM_PK_CONTROL_LEFT]    = _OLC Key::CTRL;  mapKeys[DOM_PK_CONTROL_RIGHT] = _OLC Key::CTRL;
-			mapKeys[DOM_PK_INSERT]          = _OLC Key::INS;   mapKeys[DOM_PK_DELETE]        = _OLC Key::DEL;  mapKeys[DOM_PK_HOME]      = _OLC Key::HOME;
-			mapKeys[DOM_PK_END]             = _OLC Key::END;   mapKeys[DOM_PK_PAGE_UP]       = _OLC Key::PGUP; mapKeys[DOM_PK_PAGE_DOWN] = _OLC Key::PGDN;
-			mapKeys[DOM_PK_BACKSPACE]       = _OLC Key::BACK;  mapKeys[DOM_PK_ESCAPE]        = _OLC Key::ESCAPE;
-			mapKeys[DOM_PK_ENTER]           = _OLC Key::ENTER; mapKeys[DOM_PK_NUMPAD_EQUAL]  = _OLC Key::EQUALS;
-			mapKeys[DOM_PK_NUMPAD_ENTER]    = _OLC Key::ENTER; mapKeys[DOM_PK_PAUSE]         = _OLC Key::PAUSE;
-			mapKeys[DOM_PK_SCROLL_LOCK]     = _OLC Key::SCROLL;
-			mapKeys[DOM_PK_NUMPAD_0]        = _OLC Key::NP0; mapKeys[DOM_PK_NUMPAD_1] = _OLC Key::NP1; mapKeys[DOM_PK_NUMPAD_2] = _OLC Key::NP2;
-			mapKeys[DOM_PK_NUMPAD_3]        = _OLC Key::NP3; mapKeys[DOM_PK_NUMPAD_4] = _OLC Key::NP4; mapKeys[DOM_PK_NUMPAD_5] = _OLC Key::NP5;
-			mapKeys[DOM_PK_NUMPAD_6]        = _OLC Key::NP6; mapKeys[DOM_PK_NUMPAD_7] = _OLC Key::NP7; mapKeys[DOM_PK_NUMPAD_8] = _OLC Key::NP8;
-			mapKeys[DOM_PK_NUMPAD_9]        = _OLC Key::NP9;
-			mapKeys[DOM_PK_NUMPAD_MULTIPLY] = _OLC Key::NP_MUL; mapKeys[DOM_PK_NUMPAD_DIVIDE]   = _OLC Key::NP_DIV;
-			mapKeys[DOM_PK_NUMPAD_ADD]      = _OLC Key::NP_ADD; mapKeys[DOM_PK_NUMPAD_SUBTRACT] = _OLC Key::NP_SUB;
-			mapKeys[DOM_PK_NUMPAD_DECIMAL]  = _OLC Key::NP_DECIMAL;
-			mapKeys[DOM_PK_PERIOD]          = _OLC Key::PERIOD; mapKeys[DOM_PK_EQUAL] = _OLC Key::EQUALS;
-			mapKeys[DOM_PK_COMMA]           = _OLC Key::COMMA;  mapKeys[DOM_PK_MINUS] = _OLC Key::MINUS;
-			mapKeys[DOM_PK_CAPS_LOCK]       = _OLC Key::CAPS_LOCK;
-			mapKeys[DOM_PK_SEMICOLON]       = _OLC Key::OEM_1; mapKeys[DOM_PK_SLASH]     = _OLC Key::OEM_2; mapKeys[DOM_PK_BACKQUOTE]     = _OLC Key::OEM_3;
-			mapKeys[DOM_PK_BRACKET_LEFT]    = _OLC Key::OEM_4; mapKeys[DOM_PK_BACKSLASH] = _OLC Key::OEM_5; mapKeys[DOM_PK_BRACKET_RIGHT] = _OLC Key::OEM_6;
-			mapKeys[DOM_PK_QUOTE]           = _OLC Key::OEM_7; mapKeys[DOM_PK_BACKSLASH] = _OLC Key::OEM_8;
+			mapKeys[DOM_PK_UNKNOWN] = _OLC Key_NONE;
+			mapKeys[DOM_PK_A]  = _OLC Key_A;  mapKeys[DOM_PK_B] = _OLC Key_B; mapKeys[DOM_PK_C]  = _OLC Key_C; mapKeys[DOM_PK_D] = _OLC Key_D;
+			mapKeys[DOM_PK_E]  = _OLC Key_E;  mapKeys[DOM_PK_F] = _OLC Key_F; mapKeys[DOM_PK_G]  = _OLC Key_G; mapKeys[DOM_PK_H] = _OLC Key_H;
+			mapKeys[DOM_PK_I]  = _OLC Key_I;  mapKeys[DOM_PK_J] = _OLC Key_J; mapKeys[DOM_PK_K]  = _OLC Key_K; mapKeys[DOM_PK_L] = _OLC Key_L;
+			mapKeys[DOM_PK_M]  = _OLC Key_M;  mapKeys[DOM_PK_N] = _OLC Key_N; mapKeys[DOM_PK_O]  = _OLC Key_O; mapKeys[DOM_PK_P] = _OLC Key_P;
+			mapKeys[DOM_PK_Q]  = _OLC Key_Q;  mapKeys[DOM_PK_R] = _OLC Key_R; mapKeys[DOM_PK_S]  = _OLC Key_S; mapKeys[DOM_PK_T] = _OLC Key_T;
+			mapKeys[DOM_PK_U]  = _OLC Key_U;  mapKeys[DOM_PK_V] = _OLC Key_V; mapKeys[DOM_PK_W]  = _OLC Key_W; mapKeys[DOM_PK_X] = _OLC Key_X;
+			mapKeys[DOM_PK_Y]  = _OLC Key_Y;  mapKeys[DOM_PK_Z] = _OLC Key_Z;
+			mapKeys[DOM_PK_0]  = _OLC Key_K0; mapKeys[DOM_PK_1] = _OLC Key_K1; mapKeys[DOM_PK_2] = _OLC Key_K2;
+			mapKeys[DOM_PK_3]  = _OLC Key_K3; mapKeys[DOM_PK_4] = _OLC Key_K4; mapKeys[DOM_PK_5] = _OLC Key_K5;
+			mapKeys[DOM_PK_6]  = _OLC Key_K6; mapKeys[DOM_PK_7] = _OLC Key_K7; mapKeys[DOM_PK_8] = _OLC Key_K8;
+			mapKeys[DOM_PK_9]  = _OLC Key_K9;
+			mapKeys[DOM_PK_F1] = _OLC Key_F1; mapKeys[DOM_PK_F2] = Key_F2; mapKeys[DOM_PK_F3] = Key_F3; mapKeys[DOM_PK_F4] = Key_F4;
+			mapKeys[DOM_PK_F5] = _OLC Key_F5; mapKeys[DOM_PK_F6] = Key_F6; mapKeys[DOM_PK_F7] = Key_F7; mapKeys[DOM_PK_F8] = Key_F8;
+			mapKeys[DOM_PK_F9] = _OLC Key_F9; mapKeys[DOM_PK_F10] = Key_F10; mapKeys[DOM_PK_F11] = Key_F11; mapKeys[DOM_PK_F12] = Key_F12;
+			mapKeys[DOM_PK_ARROW_UP]        = _OLC Key_UP;    mapKeys[DOM_PK_ARROW_DOWN]    = _OLC Key_DOWN;
+			mapKeys[DOM_PK_ARROW_LEFT]      = _OLC Key_LEFT;  mapKeys[DOM_PK_ARROW_RIGHT]   = _OLC Key_RIGHT;
+			mapKeys[DOM_PK_SPACE]           = _OLC Key_SPACE; mapKeys[DOM_PK_TAB]           = _OLC Key_TAB;
+			mapKeys[DOM_PK_SHIFT_LEFT]      = _OLC Key_SHIFT; mapKeys[DOM_PK_SHIFT_RIGHT]   = _OLC Key_SHIFT;
+			mapKeys[DOM_PK_CONTROL_LEFT]    = _OLC Key_CTRL;  mapKeys[DOM_PK_CONTROL_RIGHT] = _OLC Key_CTRL;
+			mapKeys[DOM_PK_INSERT]          = _OLC Key_INS;   mapKeys[DOM_PK_DELETE]        = _OLC Key_DEL;  mapKeys[DOM_PK_HOME]      = _OLC Key_HOME;
+			mapKeys[DOM_PK_END]             = _OLC Key_END;   mapKeys[DOM_PK_PAGE_UP]       = _OLC Key_PGUP; mapKeys[DOM_PK_PAGE_DOWN] = _OLC Key_PGDN;
+			mapKeys[DOM_PK_BACKSPACE]       = _OLC Key_BACK;  mapKeys[DOM_PK_ESCAPE]        = _OLC Key_ESCAPE;
+			mapKeys[DOM_PK_ENTER]           = _OLC Key_ENTER; mapKeys[DOM_PK_NUMPAD_EQUAL]  = _OLC Key_EQUALS;
+			mapKeys[DOM_PK_NUMPAD_ENTER]    = _OLC Key_ENTER; mapKeys[DOM_PK_PAUSE]         = _OLC Key_PAUSE;
+			mapKeys[DOM_PK_SCROLL_LOCK]     = _OLC Key_SCROLL;
+			mapKeys[DOM_PK_NUMPAD_0]        = _OLC Key_NP0; mapKeys[DOM_PK_NUMPAD_1] = _OLC Key_NP1; mapKeys[DOM_PK_NUMPAD_2] = _OLC Key_NP2;
+			mapKeys[DOM_PK_NUMPAD_3]        = _OLC Key_NP3; mapKeys[DOM_PK_NUMPAD_4] = _OLC Key_NP4; mapKeys[DOM_PK_NUMPAD_5] = _OLC Key_NP5;
+			mapKeys[DOM_PK_NUMPAD_6]        = _OLC Key_NP6; mapKeys[DOM_PK_NUMPAD_7] = _OLC Key_NP7; mapKeys[DOM_PK_NUMPAD_8] = _OLC Key_NP8;
+			mapKeys[DOM_PK_NUMPAD_9]        = _OLC Key_NP9;
+			mapKeys[DOM_PK_NUMPAD_MULTIPLY] = _OLC Key_NP_MUL; mapKeys[DOM_PK_NUMPAD_DIVIDE]   = _OLC Key_NP_DIV;
+			mapKeys[DOM_PK_NUMPAD_ADD]      = _OLC Key_NP_ADD; mapKeys[DOM_PK_NUMPAD_SUBTRACT] = _OLC Key_NP_SUB;
+			mapKeys[DOM_PK_NUMPAD_DECIMAL]  = _OLC Key_NP_DECIMAL;
+			mapKeys[DOM_PK_PERIOD]          = _OLC Key_PERIOD; mapKeys[DOM_PK_EQUAL] = _OLC Key_EQUALS;
+			mapKeys[DOM_PK_COMMA]           = _OLC Key_COMMA;  mapKeys[DOM_PK_MINUS] = _OLC Key_MINUS;
+			mapKeys[DOM_PK_CAPS_LOCK]       = _OLC Key_CAPS_LOCK;
+			mapKeys[DOM_PK_SEMICOLON]       = _OLC Key_OEM_1; mapKeys[DOM_PK_SLASH]     = _OLC Key_OEM_2; mapKeys[DOM_PK_BACKQUOTE]     = _OLC Key_OEM_3;
+			mapKeys[DOM_PK_BRACKET_LEFT]    = _OLC Key_OEM_4; mapKeys[DOM_PK_BACKSLASH] = _OLC Key_OEM_5; mapKeys[DOM_PK_BRACKET_RIGHT] = _OLC Key_OEM_6;
+			mapKeys[DOM_PK_QUOTE]           = _OLC Key_OEM_7; mapKeys[DOM_PK_BACKSLASH] = _OLC Key_OEM_8;
 
 			// Keyboard Callbacks
 			emscripten_set_keydown_callback("#canvas", 0, 1, keyboard_callback);
@@ -6187,12 +6199,12 @@ namespace olc
 			if (eventType == EMSCRIPTEN_EVENT_TOUCHSTART)
 			{
 				ptrPGE->olc_UpdateMouse(e->touches->targetX, e->touches->targetY);
-				ptrPGE->olc_UpdateMouseState(0, true);
+				ptrPGE->olc_UpdateMouseState(_OLC MouseButton_LEFT, true);
 			}
 
 			// End
 			if (eventType == EMSCRIPTEN_EVENT_TOUCHEND)
-				ptrPGE->olc_UpdateMouseState(0, false);
+				ptrPGE->olc_UpdateMouseState(_OLC MouseButton_LEFT, false);
 
 			return EM_TRUE;
 		}
@@ -6209,26 +6221,26 @@ namespace olc
 			if (e->button == 0) // left click
 			{
 				if (eventType == EMSCRIPTEN_EVENT_MOUSEDOWN)
-					ptrPGE->olc_UpdateMouseState(0, true);
+					ptrPGE->olc_UpdateMouseState(_OLC MouseButton_LEFT, true);
 				else if (eventType == EMSCRIPTEN_EVENT_MOUSEUP)
-					ptrPGE->olc_UpdateMouseState(0, false);
+					ptrPGE->olc_UpdateMouseState(_OLC MouseButton_LEFT, false);
 			}
 
 			if (e->button == 2) // right click
 			{
 				if (eventType == EMSCRIPTEN_EVENT_MOUSEDOWN)
-					ptrPGE->olc_UpdateMouseState(1, true);
+					ptrPGE->olc_UpdateMouseState(_OLC MouseButton_RIGHT, true);
 				else if (eventType == EMSCRIPTEN_EVENT_MOUSEUP)
-					ptrPGE->olc_UpdateMouseState(1, false);
+					ptrPGE->olc_UpdateMouseState(_OLC MouseButton_RIGHT, false);
 
 			}
 
 			if (e->button == 1) // middle click
 			{
 				if (eventType == EMSCRIPTEN_EVENT_MOUSEDOWN)
-					ptrPGE->olc_UpdateMouseState(2, true);
+					ptrPGE->olc_UpdateMouseState(_OLC MouseButton_MIDDLE, true);
 				else if (eventType == EMSCRIPTEN_EVENT_MOUSEUP)
-					ptrPGE->olc_UpdateMouseState(2, false);
+					ptrPGE->olc_UpdateMouseState(_OLC MouseButton_MIDDLE, false);
 
 				// at the moment only middle mouse needs to consume events.
 				return EM_TRUE;
