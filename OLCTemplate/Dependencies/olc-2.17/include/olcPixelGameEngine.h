@@ -1,3 +1,5 @@
+#pragma once
+
 #pragma region license_and_help
 /*
 	olcPixelGameEngine.h
@@ -289,12 +291,11 @@
 */
 #pragma endregion
 
+// O------------------------------------------------------------------------------O
+// | Example "Hello World" Program (main.cpp)                                     |
+// O------------------------------------------------------------------------------O
 #pragma region hello_world_example
-// O----------------------------------------------------------------------------------O
-// | Example "Hello World" Program (main.cpp)                                         |
-// O----------------------------------------------------------------------------------O
 /*
-
 #define OLC_PGE_APPLICATION
 #include "olcPixelGameEngine.h"
 
@@ -336,13 +337,13 @@ int main()
 */
 #pragma endregion
 
-#ifndef OLC_PGE_DEF
-#define OLC_PGE_DEF
+#ifndef OLC_PGE_DECLARATIONS
+#define OLC_PIXEL_GAME_ENGINE_H
 
+// O------------------------------------------------------------------------------O
+// | STANDARD INCLUDES                                                            |
+// O------------------------------------------------------------------------------O
 #pragma region std_includes
-// O----------------------------------------------------------------------------------O
-// | STANDARD INCLUDES                                                                |
-// O----------------------------------------------------------------------------------O
 #include <cmath>
 #include <cstdint>
 #include <string>
@@ -364,9 +365,9 @@ int main()
 
 static inline constexpr uint32_t PGE_VER = 217;
 
-// O----------------------------------------------------------------------------------O
-// | COMPILER CONFIGURATION ODDITIES                                                  |
-// O----------------------------------------------------------------------------------O
+// O------------------------------------------------------------------------------O
+// | COMPILER CONFIGURATION ODDITIES                                              |
+// O------------------------------------------------------------------------------O
 #pragma region compiler_config
 #define USE_EXPERIMENTAL_FS
 #ifdef _WIN32
@@ -400,9 +401,9 @@ static inline constexpr uint32_t PGE_VER = 217;
 
 #define UNUSED(x) static_cast<void>(x)
 
-// O----------------------------------------------------------------------------------O
-// | PLATFORM SELECTION CODE, Thanks slavka!                                          |
-// O----------------------------------------------------------------------------------O
+// O------------------------------------------------------------------------------O
+// | PLATFORM SELECTION CODE, Thanks slavka!                                      |
+// O------------------------------------------------------------------------------O
 
 // Platform
 #if !defined(OLC_PLATFORM_WINAPI) && !defined(OLC_PLATFORM_X11) && !defined(OLC_PLATFORM_GLUT) && !defined(OLC_PLATFORM_EMSCRIPTEN)
@@ -452,9 +453,9 @@ static inline constexpr uint32_t PGE_VER = 217;
 #endif
 
 
-// O----------------------------------------------------------------------------------O
-// | PLATFORM-SPECIFIC DEPENDENCIES                                                   |
-// O----------------------------------------------------------------------------------O
+// O------------------------------------------------------------------------------O
+// | PLATFORM-SPECIFIC DEPENDENCIES                                               |
+// O------------------------------------------------------------------------------O
 #ifndef OLC_PGE_HEADLESS
 #ifdef OLC_PLATFORM_WINAPI
 	// Thanks Cornchipss
@@ -501,9 +502,9 @@ static inline constexpr uint32_t PGE_VER = 217;
 #endif
 #pragma endregion
 
-// O----------------------------------------------------------------------------------O
-// | olcPixelGameEngine INTERFACE DECLARATION                                         |
-// O----------------------------------------------------------------------------------O
+// O------------------------------------------------------------------------------O
+// | olcPixelGameEngine INTERFACE DECLARATION                                     |
+// O------------------------------------------------------------------------------O
 #pragma region pge_declaration
 #define _OLC ::olc:: 
 namespace olc
@@ -1245,17 +1246,15 @@ namespace olc
 
 #pragma endregion
 
-#endif // OLC_PGE_DEF
-
-// O----------------------------------------------------------------------------------O
-// | constexpr impl, aka what must always be included before OLC_PGE_APPLICATION      |
-// O----------------------------------------------------------------------------------O
+// O------------------------------------------------------------------------------O
+// | constexpr impl, aka what must always be included before OLC_PGE_APPLICATION  |
+// O------------------------------------------------------------------------------O
 #pragma region pge_constexpr_impl
 namespace olc
 {
-	// O------------------------------------------------------------------------------O
-	// | olc::Pixel IMPLEMENTATION                                                    |
-	// O------------------------------------------------------------------------------O
+	// O--------------------------------------------------------------------------O
+	// | olc::Pixel IMPLEMENTATION                                                |
+	// O--------------------------------------------------------------------------O
 	constexpr Pixel::Pixel(uint32_t p) noexcept
 		: n(p)
 	{
@@ -1361,6 +1360,8 @@ namespace olc
 }
 #pragma endregion
 
+#endif // OLC_PGE_DECLARATIONS
+
 // O------------------------------------------------------------------------------O
 // | START OF OLC_PGE_APPLICATION                                                 |
 // O------------------------------------------------------------------------------O
@@ -1374,9 +1375,9 @@ namespace olc
 #pragma region pge_implementation
 namespace olc
 {
-	// O------------------------------------------------------------------------------O
-	// | olc::Sprite IMPLEMENTATION                                                   |
-	// O------------------------------------------------------------------------------O
+	// O--------------------------------------------------------------------------O
+	// | olc::Sprite IMPLEMENTATION                                               |
+	// O--------------------------------------------------------------------------O
 	Sprite::Sprite(const _STD string& sImageFile, _OLC ResourcePack* pack)
 	{
 		LoadFromFile(sImageFile, pack);
@@ -1496,9 +1497,9 @@ namespace olc
 		return spr;
 	}
 
-	// O------------------------------------------------------------------------------O
-	// | _OLC Decal IMPLEMENTATION                                                    |
-	// O------------------------------------------------------------------------------O
+	// O--------------------------------------------------------------------------O
+	// | olc::Decal IMPLEMENTATION                                                |
+	// O--------------------------------------------------------------------------O
 	Decal::Decal(_OLC Sprite* spr, bool filter, bool clamp)
 	{
 		id = -1;
@@ -1572,9 +1573,9 @@ namespace olc
 		return pSprite.get();
 	}
 
-	// O------------------------------------------------------------------------------O
-	// | olc::ResourcePack IMPLEMENTATION                                             |
-	// O------------------------------------------------------------------------------O
+	// O--------------------------------------------------------------------------O
+	// | olc::ResourcePack IMPLEMENTATION                                         |
+	// O--------------------------------------------------------------------------O
 
 	//=============================================================
 	// Resource Packs - Allows you to store files in one large 
@@ -1770,9 +1771,9 @@ namespace olc
 		return o;
 	};
 
-	// O------------------------------------------------------------------------------O
-	// | _OLC PixelGameEngine IMPLEMENTATION                                          |
-	// O------------------------------------------------------------------------------O
+	// O--------------------------------------------------------------------------O
+	// | olc::PixelGameEngine IMPLEMENTATION                                      |
+	// O--------------------------------------------------------------------------O
 	PixelGameEngine::PixelGameEngine()
 	{
 		sAppName = "Undefined";
@@ -3758,16 +3759,20 @@ namespace olc
 };
 #pragma endregion
 
+
+
+#ifndef OLC_PGE_HEADLESS
+
+
 // O------------------------------------------------------------------------------O
 // | olcPixelGameEngine Renderers - the draw-y bits                               |
 // O------------------------------------------------------------------------------O
 
-#ifndef OLC_PGE_HEADLESS
 
-#pragma region renderer_ogl10
 // O------------------------------------------------------------------------------O
 // | START RENDERER: OpenGL 1.0 (the original, the best...)                       |
 // O------------------------------------------------------------------------------O
+#pragma region renderer_ogl10
 #ifdef OLC_GFX_OPENGL10
 
 #ifdef OLC_PLATFORM_WINAPI
@@ -4165,10 +4170,10 @@ namespace olc
 // O------------------------------------------------------------------------------O
 #pragma endregion
 
-#pragma region renderer_ogl33
 // O------------------------------------------------------------------------------O
 // | START RENDERER: OpenGL 3.3 (3.0 es) (sh-sh-sh-shaders....)                   |
 // O------------------------------------------------------------------------------O
+#pragma region renderer_ogl33
 #ifdef OLC_GFX_OPENGL33
 
 #ifdef OLC_PLATFORM_WINAPI
@@ -4700,14 +4705,16 @@ namespace olc
 // O------------------------------------------------------------------------------O
 #pragma endregion
 
+
 // O------------------------------------------------------------------------------O
 // | olcPixelGameEngine Image loaders                                             |
 // O------------------------------------------------------------------------------O
 
-#pragma region image_gdi
+
 // O------------------------------------------------------------------------------O
 // | START IMAGE LOADER: GDI+, Windows Only, always exists, a little slow         |
 // O------------------------------------------------------------------------------O
+#pragma region image_gdi
 #ifdef OLC_IMAGE_GDI
 
 #define min(a, b) ((a < b) ? a : b)
@@ -4829,10 +4836,10 @@ namespace olc
 // O------------------------------------------------------------------------------O
 #pragma endregion
 
-#pragma region image_libpng
 // O------------------------------------------------------------------------------O
 // | START IMAGE LOADER: libpng, default on linux, requires -lpng  (libpng-dev)   |
 // O------------------------------------------------------------------------------O
+#pragma region image_libpng
 #ifdef OLC_IMAGE_LIBPNG
 #include <png.h>
 namespace olc
@@ -4957,10 +4964,10 @@ namespace olc
 // O------------------------------------------------------------------------------O
 #pragma endregion
 
-#pragma region image_stb
 // O------------------------------------------------------------------------------O
 // | START IMAGE LOADER: stb_image.h, all systems, very fast                      |
 // O------------------------------------------------------------------------------O
+#pragma region image_stb
 // Thanks to Sean Barrett - https://github.com/nothings/stb/blob/master/stb_image.h
 // MIT License - Copyright(c) 2017 Sean Barrett
 
@@ -5029,14 +5036,16 @@ namespace olc
 // O------------------------------------------------------------------------------O
 #pragma endregion
 
+
 // O------------------------------------------------------------------------------O
 // | olcPixelGameEngine Platforms                                                 |
 // O------------------------------------------------------------------------------O
 
-#pragma region platform_windows
+
 // O------------------------------------------------------------------------------O
 // | START PLATFORM: MICROSOFT WINDOWS XP, VISTA, 7, 8, 10                        |
 // O------------------------------------------------------------------------------O
+#pragma region platform_windows
 #ifdef OLC_PLATFORM_WINAPI
 
 #if defined(_WIN32) && !defined(__MINGW32__)
@@ -5277,10 +5286,10 @@ namespace olc
 // O------------------------------------------------------------------------------O
 #pragma endregion
 
-#pragma region platform_linux
 // O------------------------------------------------------------------------------O
 // | START PLATFORM: LINUX                                                        |
 // O------------------------------------------------------------------------------O
+#pragma region platform_linux
 #ifdef OLC_PLATFORM_X11
 namespace olc
 {
@@ -5527,11 +5536,10 @@ namespace olc
 // O------------------------------------------------------------------------------O
 #pragma endregion
 
-#pragma region platform_glut
 // O------------------------------------------------------------------------------O
 // | START PLATFORM: GLUT (used to make it simple for Apple)                      |
 // O------------------------------------------------------------------------------O
-//
+#pragma region platform_glut
 // VERY IMPORTANT!!! The Apple port was originally created by @Mumflr (discord)
 // and the repo for the development of this project can be found here:
 // https://github.com/MumflrFumperdink/olcPGEMac which contains maccy goodness
@@ -5853,11 +5861,10 @@ namespace olc {
 // O------------------------------------------------------------------------------O
 #pragma endregion
 
-#pragma region platform_emscripten
 // O------------------------------------------------------------------------------O
 // | START PLATFORM: Emscripten - Totally Game Changing...                        |
 // O------------------------------------------------------------------------------O
-
+#pragma region platform_emscripten
 //	Firstly a big mega thank you to members of the OLC Community for sorting this 
 //	out. Making a browser compatible version has been a priority for quite some
 //	time, but I lacked the expertise to do it. This awesome feature is possible
@@ -6322,8 +6329,9 @@ extern "C"
 // O------------------------------------------------------------------------------O
 #pragma endregion
 
+#endif // OLC_PGE_HEADLESS
 
-#endif // Headless
+
 
 // O------------------------------------------------------------------------------O
 // | olcPixelGameEngine Auto-Configuration                                        |
@@ -6338,63 +6346,49 @@ namespace olc
 #ifdef OLC_IMAGE_GDI
 		_OLC Sprite::loader = _STD make_unique<_OLC ImageLoader_GDIPlus>();
 #endif
-
 #ifdef OLC_IMAGE_LIBPNG
 		_OLC Sprite::loader = _STD make_unique<_OLC ImageLoader_LibPNG>();
 #endif
-
 #ifdef OLC_IMAGE_STB
 		_OLC Sprite::loader = _STD make_unique<_OLC ImageLoader_STB>();
 #endif
-
 #ifdef OLC_IMAGE_CUSTOM_EX
 		_OLC Sprite::loader = _STD make_unique<OLC_IMAGE_CUSTOM_EX>();
 #endif
 
 
-
 #ifdef OLC_PLATFORM_WINAPI
 		platform = _STD make_unique<_OLC Platform_Windows>();
 #endif
-
 #ifdef OLC_PLATFORM_X11
 		platform = _STD make_unique<_OLC Platform_Linux>();
 #endif
-
 #ifdef OLC_PLATFORM_GLUT
 		platform = _STD make_unique<_OLC Platform_GLUT>();
 #endif
-
 #ifdef OLC_PLATFORM_EMSCRIPTEN
 		platform = _STD make_unique<_OLC Platform_Emscripten>();
 #endif
-
 #ifdef OLC_PLATFORM_CUSTOM_EX
 		platform = _STD make_unique<OLC_PLATFORM_CUSTOM_EX>();
 #endif
 
 
-
 #ifdef OLC_GFX_OPENGL10
 		renderer = _STD make_unique<_OLC Renderer_OGL10>();
 #endif
-
 #ifdef OLC_GFX_OPENGL33
 		renderer = _STD make_unique<_OLC Renderer_OGL33>();
 #endif
-
 #ifdef OLC_GFX_OPENGLES2
 		renderer = _STD make_unique<_OLC Renderer_OGLES2>();
 #endif
-
 #ifdef OLC_GFX_DIRECTX10
 		renderer = _STD make_unique<_OLC Renderer_DX10>();
 #endif
-
 #ifdef OLC_GFX_DIRECTX11
 		renderer = _STD make_unique<_OLC Renderer_DX11>();
 #endif
-
 #ifdef OLC_GFX_CUSTOM_EX
 		renderer = _STD make_unique<OLC_RENDERER_CUSTOM_EX>();
 #endif
@@ -6412,7 +6406,7 @@ namespace olc
 
 #pragma endregion
 
-#endif // End OLC_PGE_APPLICATION
+#endif // OLC_PGE_APPLICATION
 
 // O------------------------------------------------------------------------------O
 // | END OF OLC_PGE_APPLICATION                                                   |
