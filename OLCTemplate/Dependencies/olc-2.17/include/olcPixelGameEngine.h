@@ -546,22 +546,22 @@ namespace olc
 		constexpr Pixel(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = _OLC nDefaultAlpha) noexcept
 			: n(red | (green << 8) | (blue << 16) | (alpha << 24)) {} // Thanks jarekpelczar
 		constexpr Pixel(uint32_t p) noexcept;
-		constexpr _OLC Pixel& operator = (const _OLC Pixel& v) = default;
-		constexpr bool operator ==(const _OLC Pixel& p) const;
-		constexpr bool operator !=(const _OLC Pixel& p) const;
-		constexpr _OLC Pixel  operator * (float i) const;
-		constexpr _OLC Pixel  operator / (float i) const;
-		constexpr _OLC Pixel& operator *=(float i);
-		constexpr _OLC Pixel& operator /=(float i);
-		constexpr _OLC Pixel  operator + (_OLC Pixel p) const;
-		constexpr _OLC Pixel  operator - (_OLC Pixel p) const;
-		constexpr _OLC Pixel& operator +=(_OLC Pixel p);
-		constexpr _OLC Pixel& operator -=(_OLC Pixel p);
-		constexpr _OLC Pixel  inv() const;
+		constexpr _OLC Pixel& operator = (const _OLC Pixel&) noexcept = default;
+		constexpr bool operator ==(const _OLC Pixel& p) const noexcept;
+		constexpr bool operator !=(const _OLC Pixel& p) const noexcept;
+		constexpr _OLC Pixel  operator * (float i) const noexcept;
+		constexpr _OLC Pixel  operator / (float i) const noexcept;
+		constexpr _OLC Pixel& operator *=(float i) noexcept;
+		constexpr _OLC Pixel& operator /=(float i) noexcept;
+		constexpr _OLC Pixel  operator + (_OLC Pixel p) const noexcept;
+		constexpr _OLC Pixel  operator - (_OLC Pixel p) const noexcept;
+		constexpr _OLC Pixel& operator +=(_OLC Pixel p) noexcept;
+		constexpr _OLC Pixel& operator -=(_OLC Pixel p) noexcept;
+		constexpr _OLC Pixel  inv() const noexcept;
 	};
 
-	constexpr _OLC Pixel PixelF(float red, float green, float blue, float alpha = 1.0f);
-	constexpr _OLC Pixel PixelLerp(_OLC Pixel p1, _OLC Pixel p2, float t);
+	constexpr _OLC Pixel PixelF(float red, float green, float blue, float alpha = 1.0f) noexcept;
+	constexpr _OLC Pixel PixelLerp(_OLC Pixel p1, _OLC Pixel p2, float t) noexcept;
 
 	// O------------------------------------------------------------------------------O
 	// | USEFUL CONSTANTS                                                             |
@@ -1261,17 +1261,17 @@ namespace olc
 
 	}
 
-	constexpr bool Pixel::operator==(const _OLC Pixel& p) const
+	constexpr bool Pixel::operator==(const _OLC Pixel& p) const noexcept
 	{
 		return n == p.n;
 	}
 
-	constexpr bool Pixel::operator!=(const _OLC Pixel& p) const
+	constexpr bool Pixel::operator!=(const _OLC Pixel& p) const noexcept
 	{
 		return n != p.n;
 	}
 
-	constexpr _OLC Pixel  Pixel::operator * (float i) const
+	constexpr _OLC Pixel  Pixel::operator * (float i) const noexcept
 	{
 		uint8_t r = static_cast<uint8_t>(_STD clamp(this->r * i, 0.0f, 255.0f));
 		uint8_t g = static_cast<uint8_t>(_STD clamp(this->g * i, 0.0f, 255.0f));
@@ -1279,7 +1279,7 @@ namespace olc
 		return _OLC Pixel(r, g, b, a);
 	}
 
-	constexpr _OLC Pixel  Pixel::operator / (float i) const
+	constexpr _OLC Pixel  Pixel::operator / (float i) const noexcept
 	{
 		uint8_t r = static_cast<uint8_t>(_STD clamp(this->r / i, 0.0f, 255.0f));
 		uint8_t g = static_cast<uint8_t>(_STD clamp(this->g / i, 0.0f, 255.0f));
@@ -1287,7 +1287,7 @@ namespace olc
 		return _OLC Pixel(r, g, b, a);
 	}
 
-	constexpr _OLC Pixel& Pixel::operator *=(float i)
+	constexpr _OLC Pixel& Pixel::operator *=(float i) noexcept
 	{
 		r = static_cast<uint8_t>(_STD clamp(r * i, 0.0f, 255.0f));
 		g = static_cast<uint8_t>(_STD clamp(g * i, 0.0f, 255.0f));
@@ -1295,7 +1295,7 @@ namespace olc
 		return *this;
 	}
 
-	constexpr _OLC Pixel& Pixel::operator /=(float i)
+	constexpr _OLC Pixel& Pixel::operator /=(float i) noexcept
 	{
 		r = static_cast<uint8_t>(_STD clamp(r / i, 0.0f, 255.0f));
 		g = static_cast<uint8_t>(_STD clamp(g / i, 0.0f, 255.0f));
@@ -1303,7 +1303,7 @@ namespace olc
 		return *this;
 	}
 
-	constexpr _OLC Pixel  Pixel::operator + (_OLC Pixel p) const
+	constexpr _OLC Pixel  Pixel::operator + (_OLC Pixel p) const noexcept
 	{
 		uint8_t r = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(this->r) + static_cast<int32_t>(p.r), 0, 255));
 		uint8_t g = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(this->g) + static_cast<int32_t>(p.g), 0, 255));
@@ -1311,7 +1311,7 @@ namespace olc
 		return _OLC Pixel(r, g, b, a);
 	}
 
-	constexpr _OLC Pixel  Pixel::operator - (_OLC Pixel p) const
+	constexpr _OLC Pixel  Pixel::operator - (_OLC Pixel p) const noexcept
 	{
 		uint8_t r = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(this->r) - static_cast<int32_t>(p.r), 0, 255));
 		uint8_t g = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(this->g) - static_cast<int32_t>(p.g), 0, 255));
@@ -1319,7 +1319,7 @@ namespace olc
 		return _OLC Pixel(r, g, b, a);
 	}
 
-	constexpr _OLC Pixel& Pixel::operator += (_OLC Pixel p)
+	constexpr _OLC Pixel& Pixel::operator += (_OLC Pixel p) noexcept
 	{
 		r = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(r) + static_cast<int32_t>(p.r), 0, 255));
 		g = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(g) + static_cast<int32_t>(p.g), 0, 255));
@@ -1327,7 +1327,7 @@ namespace olc
 		return *this;
 	}
 
-	constexpr _OLC Pixel& Pixel::operator -= (_OLC Pixel p) // Thanks Au Lit
+	constexpr _OLC Pixel& Pixel::operator -= (_OLC Pixel p) noexcept // Thanks Au Lit
 	{
 		r = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(r) - static_cast<int32_t>(p.r), 0, 255));
 		g = static_cast<uint8_t>(_STD clamp(static_cast<int32_t>(g) - static_cast<int32_t>(p.g), 0, 255));
@@ -1335,7 +1335,7 @@ namespace olc
 		return *this;
 	}
 
-	constexpr _OLC Pixel Pixel::inv() const
+	constexpr _OLC Pixel Pixel::inv() const noexcept
 	{
 		uint8_t r = static_cast<uint8_t>(_STD clamp(255 - static_cast<int32_t>(this->r), 0, 255));
 		uint8_t g = static_cast<uint8_t>(_STD clamp(255 - static_cast<int32_t>(this->g), 0, 255));
@@ -1343,7 +1343,7 @@ namespace olc
 		return _OLC Pixel(r, g, b, a);
 	}
 
-	constexpr _OLC Pixel PixelF(float red, float green, float blue, float alpha)
+	constexpr _OLC Pixel PixelF(float red, float green, float blue, float alpha) noexcept
 	{
 		return _OLC Pixel(
 			static_cast<uint8_t>(_STD clamp(red, 0.0f, 1.0f) * 255.0f),
@@ -1353,7 +1353,7 @@ namespace olc
 		);
 	}
 
-	constexpr _OLC Pixel PixelLerp(_OLC Pixel p1, _OLC Pixel p2, float t)
+	constexpr _OLC Pixel PixelLerp(_OLC Pixel p1, _OLC Pixel p2, float t) noexcept
 	{
 		return (p2 * t) + p1 * (1.0f - t);
 	}
