@@ -683,17 +683,21 @@ namespace olc
 		template<typename T2> constexpr _OLC v2d_generic<T>& operator-=(const _OLC v2d_generic<T2>& rhs) noexcept;
 		template<typename T2> constexpr _OLC v2d_generic<T>  operator* (const _OLC v2d_generic<T2>& rhs) const noexcept;
 		template<typename T2> constexpr _OLC v2d_generic<T>& operator*=(const _OLC v2d_generic<T2>& rhs) noexcept;
-		template<typename T2> constexpr _OLC v2d_generic<T>  operator* (const T2& rhs) const noexcept;
-		template<typename T2> constexpr _OLC v2d_generic<T>& operator*=(const T2& rhs) noexcept;
 		template<typename T2> constexpr _OLC v2d_generic<T>  operator/ (const _OLC v2d_generic<T2>& rhs) const noexcept;
 		template<typename T2> constexpr _OLC v2d_generic<T>& operator/=(const _OLC v2d_generic<T2>& rhs) noexcept;
+		template<typename T2> constexpr _OLC v2d_generic<T>  operator+ (const T2& rhs) const noexcept;
+		template<typename T2> constexpr _OLC v2d_generic<T>& operator+=(const T2& rhs) noexcept;
+		template<typename T2> constexpr _OLC v2d_generic<T>  operator- (const T2& rhs) const noexcept;
+		template<typename T2> constexpr _OLC v2d_generic<T>& operator-=(const T2& rhs) noexcept;
+		template<typename T2> constexpr _OLC v2d_generic<T>  operator* (const T2& rhs) const noexcept;
+		template<typename T2> constexpr _OLC v2d_generic<T>& operator*=(const T2& rhs) noexcept;
 		template<typename T2> constexpr _OLC v2d_generic<T>  operator/ (const T2& rhs) const noexcept;
 		template<typename T2> constexpr _OLC v2d_generic<T>& operator/=(const T2& rhs) noexcept;
 		constexpr _OLC v2d_generic<T> operator+() const noexcept;
 		constexpr _OLC v2d_generic<T> operator-() const noexcept;
 		constexpr bool operator==(const _OLC v2d_generic<T>& rhs) const noexcept;
 		constexpr bool operator!=(const _OLC v2d_generic<T>& rhs) const noexcept;
-		constexpr operator bool() const noexcept;
+		explicit constexpr operator bool() const noexcept;
 		_NODISCARD _STD string str() const;
 
 		// To stop dandistine from crying...
@@ -860,22 +864,6 @@ namespace olc
 
 	template<typename T>
 	template<typename T2>
-	constexpr _OLC v2d_generic<T> (_OLC v2d_generic<T>::operator*)(const T2& rhs) const noexcept
-	{
-		return +*this *= rhs;
-	}
-
-	template<typename T>
-	template<typename T2>
-	constexpr _OLC v2d_generic<T>& (_OLC v2d_generic<T>::operator*=)(const T2& rhs) noexcept
-	{
-		x *= rhs;
-		y *= rhs;
-		return *this;
-	}
-
-	template<typename T>
-	template<typename T2>
 	constexpr _OLC v2d_generic<T>(_OLC v2d_generic<T>::operator/)(const _OLC v2d_generic<T2>& rhs) const noexcept
 	{
 		return +*this /= rhs;
@@ -887,6 +875,54 @@ namespace olc
 	{
 		x /= rhs.x;
 		y /= rhs.y;
+		return *this;
+	}
+
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T>(_OLC v2d_generic<T>::operator+)(const T2& rhs) const noexcept
+	{
+		return +*this += rhs;
+	}
+
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T>& (_OLC v2d_generic<T>::operator+=)(const T2& rhs) noexcept
+	{
+		x += rhs;
+		y += rhs;
+		return *this;
+	}
+
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T>(_OLC v2d_generic<T>::operator-)(const T2& rhs) const noexcept
+	{
+		return +*this -= rhs;
+	}
+
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T>& (_OLC v2d_generic<T>::operator-=)(const T2& rhs) noexcept
+	{
+		x -= rhs;
+		y -= rhs;
+		return *this;
+	}
+
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T>(_OLC v2d_generic<T>::operator*)(const T2& rhs) const noexcept
+	{
+		return +*this *= rhs;
+	}
+
+	template<typename T>
+	template<typename T2>
+	constexpr _OLC v2d_generic<T>& (_OLC v2d_generic<T>::operator*=)(const T2& rhs) noexcept
+	{
+		x *= rhs;
+		y *= rhs;
 		return *this;
 	}
 
