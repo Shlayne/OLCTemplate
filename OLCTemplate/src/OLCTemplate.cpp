@@ -1,19 +1,19 @@
 #include "OLCTemplate.h"
 
-#define CHECK_ERROR(error, message, codeOffset)                      \
-	do                                                               \
-	{                                                                \
-		if ((error) != ::olc::rcode::OK)                             \
-		{                                                            \
-			std::cerr << (message) << '\n';                          \
-			switch (error)                                           \
-			{                                                        \
-				case ::olc::rcode::FAIL:    return (codeOffset) + 1; \
-				case ::olc::rcode::NO_FILE: return (codeOffset) + 2; \
-				default:                    return (codeOffset) + 0; \
-			}                                                        \
-		}                                                            \
-	}                                                                \
+#define CHECK_ERROR(error, message, errorCodeOffset)                    \
+	do                                                                  \
+	{                                                                   \
+		if ((error) != _OLC rcode::OK)                                  \
+		{                                                               \
+			std::cerr << (message) << '\n';                             \
+			switch (error)                                              \
+			{                                                           \
+				case _OLC rcode::FAIL:    return (errorCodeOffset) + 1; \
+				case _OLC rcode::NO_FILE: return (errorCodeOffset) + 2; \
+				default:                  return (errorCodeOffset) + 0; \
+			}                                                           \
+		}                                                               \
+	}                                                                   \
 	while (false)
 
 int Main(int argc, char** argv)
