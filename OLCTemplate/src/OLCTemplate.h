@@ -8,7 +8,7 @@ class OLCTemplate : public olc::PixelGameEngine
 {
 public:
 	OLCTemplate();
-public:
+protected:
 	virtual bool OnUserCreate() override;
 	virtual bool OnUserUpdate(float elapsedTime) override;
 	virtual bool OnUserDestroy() override;
