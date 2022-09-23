@@ -1,40 +1,8 @@
 #include "OLCTemplate.h"
 
-#define CHECK_ERROR(error, message, errorCodeOffset)                    \
-	do                                                                  \
-	{                                                                   \
-		if ((error) != _OLC rcode::OK)                                  \
-		{                                                               \
-			std::cerr << (message) << '\n';                             \
-			switch (error)                                              \
-			{                                                           \
-				case _OLC rcode::FAIL:    return (errorCodeOffset) + 1; \
-				case _OLC rcode::NO_FILE: return (errorCodeOffset) + 2; \
-				default:                  return (errorCodeOffset) + 0; \
-			}                                                           \
-		}                                                               \
-	}                                                                   \
-	while (false)
-
-int Main(int argc, char** argv)
-{
-	UNUSED(argc, argv);
-
-	olc::rcode error = olc::rcode::OK;
-	OLCTemplate olcTemplate;
-
-	error = olcTemplate.Construct(320, 200, 4, 4); // (1280, 800) / 4 -> 16:10 aspect ratio
-	CHECK_ERROR(error, "Failed to create application.", 0x1000);
-
-	error = olcTemplate.Start();
-	CHECK_ERROR(error, "Failed to run application.", 0x2000);
-
-	return 0;
-}
-
 OLCTemplate::OLCTemplate() : olc::PixelGameEngine()
 {
-	sAppName = "OLC Template";
+	sAppName = "OLCTemplate";
 }
 
 bool OLCTemplate::OnUserCreate()
@@ -50,4 +18,25 @@ bool OLCTemplate::OnUserUpdate(float elapsedTime)
 bool OLCTemplate::OnUserDestroy()
 {
 	return true;
+}
+
+int Main(int argc, char** argv)
+{
+	UNUSED(argc, argv);
+
+	OLCTemplate app;
+
+	if (app.Construct(320, 200, 4, 4) != olc::rcode::OK) // (1280, 800) / 4 -> 16:10 aspect ratio
+	{
+		std::cerr << "Failed to create application.\n";
+		return 1;
+	}
+
+	if (app.Start() != olc::rcode::OK)
+	{
+		std::cerr << "Failed to run application.\n";
+		return 2;
+	}
+
+	return 0;
 }
