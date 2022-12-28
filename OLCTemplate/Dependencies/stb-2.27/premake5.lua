@@ -28,6 +28,9 @@ project "stb"
 		buildoptions "/wd5105" -- Until Microsoft updates Windows 10 to not have terrible code (aka never), this must be here to prevent a warning.
 		defines "SYSTEM_WINDOWS"
 
+		-- Required because visual studio precompiled their module ifc's with dynamic linking.
+		staticruntime "Off"
+
 	filter "configurations:Debug"
 		runtime "Debug"
 		optimize "Debug"
