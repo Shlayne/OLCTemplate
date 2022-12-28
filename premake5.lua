@@ -21,7 +21,7 @@ workspace "__WORKSPACE_NAME__"
 		"premake5.lua",
 		"Dependencies/Dependencies.lua",
 		"Dependencies/premake/Custom/solutionitems.lua",
-		"Dependencies/premake/Custom/usestdpreproc.lua",
+		"Dependencies/premake/Custom/notyetimplemented.lua",
 		
 		-- Misc
 		"README.md"
@@ -33,7 +33,7 @@ workspace "__WORKSPACE_NAME__"
 
 OutputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
-include "Dependencies/premake/Custom/usestdpreproc.lua"
+include "Dependencies/premake/Custom/notyetimplemented.lua"
 include "Dependencies/Dependencies.lua"
 
 -- Add any projects here with 'include "__PROJECT_NAME__"'

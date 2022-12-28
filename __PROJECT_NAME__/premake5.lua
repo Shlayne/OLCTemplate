@@ -13,7 +13,8 @@ project "__PROJECT_NAME__"
 		"src/**.c",
 		"src/**.hpp",
 		"src/**.cpp",
-		"src/**.inl"
+		"src/**.inl",
+		"src/**.ixx"
 	}
 
 	includedirs {
@@ -35,6 +36,18 @@ project "__PROJECT_NAME__"
 		usestdpreproc "On"
 		buildoptions "/wd5105" -- Until Microsoft updates Windows 10 to not have terrible code (aka never), this must be here to prevent a warning.
 		defines "SYSTEM_WINDOWS"
+
+		-- Modules are OP.
+		scanformoduledependencies "True"
+		enablemodules "On"
+
+		-- msvc doesn't provide __VA_OPT__ by default; this fixes that.
+		usestdpreproc "On"
+
+		-- These two are required because visual studio precompiled their module
+		-- ifc's with dynamic linking and imprecise floating point operations.
+		staticruntime "Off"
+		floatingpoint "None"
 
 	filter "configurations:Profile"
 		runtime "Debug"
