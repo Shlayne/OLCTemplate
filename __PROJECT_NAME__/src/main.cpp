@@ -7,9 +7,9 @@ int Main(int argc, char** argv)
 	// TODO: run your code, but please, please, please, not in this file.
 	// Just call a function here, or construct, run, and destruct you app.
 	// For example:
-	//	Application* pApplication = CreateApplication(argc, argv);
-	//	pApplication->Run();
-	//	delete pApplication;
+	//	Application* application = CreateApplication(argc, argv);
+	//	application->Run();
+	//	delete application;
 
 	return 0;
 }
