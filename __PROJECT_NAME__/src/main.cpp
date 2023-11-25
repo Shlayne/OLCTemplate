@@ -1,6 +1,6 @@
 #if SYSTEM_WINDOWS
 
-#include "OLCTemplate.h"
+#include "OLCTemplate.hpp"
 
 #if CONFIG_DIST
 

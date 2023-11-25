@@ -1,4 +1,4 @@
-#include "OLCTemplate.h"
+#include "OLCTemplate.hpp"
 
 OLCTemplate::OLCTemplate()
 {
