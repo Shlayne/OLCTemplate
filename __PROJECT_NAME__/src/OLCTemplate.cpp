@@ -1,6 +1,6 @@
 #include "OLCTemplate.h"
 
-OLCTemplate::OLCTemplate() : olc::PixelGameEngine()
+OLCTemplate::OLCTemplate()
 {
 	sAppName = "OLCTemplate";
 }
