@@ -5,8 +5,11 @@ project "olc"
 	cdialect "C17"
 	staticruntime "On"
 
-	targetdir ("%{wks.location}/bin/" .. OutputDir .. "/%{prj.name}")
-	objdir ("%{wks.location}/bin-int/" .. OutputDir .. "/%{prj.name}")
+	enablemodules "Off"
+
+	prebuildcommands "%{RunPreBuild}"
+	targetdir "%{TargetDir}"
+	objdir "%{OBJDir}"
 
 	files {
 		"include/olcPixelGameEngine.h",
@@ -20,17 +23,20 @@ project "olc"
 		-- "%{wks.location}/__PROJECT_NAME__/src",
 
 		-- Add any dependency includes here.
-		"%{IncludeDir.stb}",
+		"%{IncludeDirs.stb}",
 	}
 
 	filter "system:windows"
 		systemversion "latest"
-		usestdpreproc "On"
-		buildoptions "/wd5105" -- Until Microsoft updates Windows 10 to not have terrible code (aka never), this must be here to prevent a warning.
+		usestdpreproc "On" -- msvc doesn't provide __VA_OPT__ by default; this fixes that.
+		buildoptions "/wd5105" -- Prevents a warning produced at WinBase.h:9528.
 		defines "SYSTEM_WINDOWS"
 
-		-- Required because visual studio precompiled their module ifc's with dynamic linking.
-		staticruntime "Off"
+		-- These two are required because visual studio precompiled their module
+		-- ifc's with dynamic runtime and imprecise floating point operations.
+		-- If modules aren't working, uncomment these two lines.
+		--	staticruntime "Off"
+		--	floatingpoint "None"
 
 	filter "configurations:Debug"
 		runtime "Debug"

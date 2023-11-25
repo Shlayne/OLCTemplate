@@ -7,5 +7,6 @@
 *.cpp text
 *.hpp text
 *.inl text
+*.ixx text
 *.lua text
 *.bat text
