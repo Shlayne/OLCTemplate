@@ -8,7 +8,7 @@ Libraries = {}
 	--	IncludeDirs["__EXAMPLE_PROJECT_NAME__"] = "%{__EXAMPLE_PROJECT_DIR__}/__EXAMPLE_PROJECT_INCLUDE_PATH__"
 
 	-- Header and Source; they have their own project.
-	IncludeDirs["olc"] = "%{DependencyDir}olc-2.17/include/"
+	IncludeDirs["olc"] = "%{DependencyDir}olc-2.23/include/"
 	IncludeDirs["stb"] = "%{DependencyDir}stb-2.27/include/"
 
 	-- Header-Only; they don't have their own project.

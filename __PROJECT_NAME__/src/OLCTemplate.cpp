@@ -22,11 +22,11 @@ bool OLCTemplate::OnUserDestroy()
 
 int Main(int argc, char** argv)
 {
-	UNUSED(argc, argv);
+	static_cast<void>(argc, argv);
 
 	OLCTemplate app;
 
-	if (app.Construct(320, 200, 4, 4) != olc::rcode::OK) // (1280, 800) / 4 -> 16:10 aspect ratio
+	if (app.Construct(320, 200, 4, 4, false, true) != olc::rcode::OK) // (1280, 800) / 4 -> 16:10 aspect ratio
 	{
 		std::cerr << "Failed to create application.\n";
 		return 1;

@@ -44,6 +44,6 @@ OBJDir = "%{wks.location}/bin-int/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architectu
 include "__PROJECT_NAME__/Build__PROJECT_NAME__.lua"
 
 group "Dependencies/__PROJECT_NAME__"
-	include "__PROJECT_NAME__/Dependencies/olc-2.17/BuildOLC.lua"
+	include "__PROJECT_NAME__/Dependencies/olc-2.23/BuildOLC.lua"
 	include "__PROJECT_NAME__/Dependencies/stb-2.27/BuildSTB.lua"
 group ""
