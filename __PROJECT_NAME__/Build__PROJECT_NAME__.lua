@@ -6,7 +6,8 @@ project "__PROJECT_NAME__"
 	staticruntime "On"
 
 	enablemodules "Off"
-	
+
+	prebuildcommands "%{RunPreBuild}"
 	targetdir "%{TargetDir}"
 	objdir "%{OBJDir}"
 

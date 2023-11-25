@@ -1,4 +1,5 @@
 include "BuildExtensions.lua"
+include "BuildDependencies.lua"
 
 workspace "__WORKSPACE_NAME__"
 	architecture "x86_64"
@@ -13,7 +14,7 @@ workspace "__WORKSPACE_NAME__"
 		-- Git
 		".gitignore",
 		".gitattributes",
-		
+
 		-- Misc
 		"README.md",
 	}
@@ -32,12 +33,12 @@ workspace "__WORKSPACE_NAME__"
 		"__PROJECT_NAME__/Build__PROJECT_NAME__.lua",
 
 		-- Dependency Project Build Scripts
-		--	"__PROJECT_NAME__/Dependencies/__DEPENDENCY_NAME__/Build__DEPENDENCY_NAME__.lua",
+		--	"__EXAMPLE_PROJECT_NAME__/Dependencies/__EXAMPLE_DEPENDENCY_NAME__/Build__EXAMPLE_DEPENDENCY_NAME__.lua",
 	}
-	
+
+RunPreBuild = "pushd \"%{wks.location}\" && \"Scripts/PreBuild.bat\" && popd"
 TargetDir = "%{wks.location}/bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/%{prj.name}"
 OBJDir = "%{wks.location}/bin-int/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/%{prj.name}"
-RunPreBuild = "pushd \"%{wks.location}\" && \"Scripts/PreBuild.bat\" && popd"
 
 -- Add any projects here with 'include "Build__EXAMPLE_PROJECT_NAME__.lua"'
 include "__PROJECT_NAME__/Build__PROJECT_NAME__.lua"
